@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from joi import views as joi_views
 
 urlpatterns = [
     path('joi/', include('joi.urls')),
     path('admin/', admin.site.urls),
+    path('', joi_views.index, name='index')
 ]

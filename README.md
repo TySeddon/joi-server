@@ -41,5 +41,6 @@ Create a migration when you have changed model code
 Apply outstanding migrations to the database
     python manage.py migrate     
 
-
+#### Start Django Shell
+    python manage.py shell
 
