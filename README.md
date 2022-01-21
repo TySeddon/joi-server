@@ -44,3 +44,14 @@ Apply outstanding migrations to the database
 #### Start Django Shell
     python manage.py shell
 
+## Chrome Configure
+
+### Allow Sound to Auto Play
+Chromse does not allow videos to automatically play (autoplay).  This can be overridden in settings.
+1. Open chrome
+2. In URL type "chrome://settings/content/sound"
+3. Under "Customized behaviors", "Allowed to play sound", click "Add" button
+4. Enter the URLs that are allowed to auto play.
+    * localhost:8000
+    * URL for production (TBD)
+

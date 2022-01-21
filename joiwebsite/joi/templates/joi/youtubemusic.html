@@ -1,0 +1,89 @@
+<!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
+<div id="player"></div>
+
+<script>
+    // 2. This code loads the IFrame Player API code asynchronously.
+    var tag = document.createElement('script');
+
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    // 3. This function creates an <iframe> (and YouTube player)
+    //    after the API code downloads.
+    var player;
+    var videoId = '';
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+            height: '390',
+            width: '640',
+            videoId: videoId,
+            playerVars: {
+                'playsinline': 1,
+                'controls': 0,
+                'rel': 0, 
+                'showinfo': 0, 
+                'ecver': 2
+            },
+            events: {
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange
+            }
+        });
+    }
+
+    // 4. The API will call this function when the video player is ready.
+    function onPlayerReady(event) {
+        //event.target.playVideo();
+        playVideoById('KmnKCE99sYE');
+    }
+
+    // 5. The API calls this function when the player's state changes.
+    //    The function indicates that when playing a video (state=1),
+    //    get the player state through event.data.  Possible values are:
+    //      -1 – unstarted
+    //      0 – ended - YT.PlayerState.ENDED
+    //      1 – playing - YT.PlayerState.PLAYING
+    //      2 – paused - YT.PlayerState.PAUSED
+    //      3 – buffering
+    //      5 – video cued
+    var done = false;
+    function onPlayerStateChange(event) {
+        //console.log(YT.PlayerState.ENDED);
+        //console.log(YT.PlayerState.PLAYING);
+        //console.log(YT.PlayerState.PAUSED);
+        if (event.data == YT.PlayerState.PLAYING && !done) {
+            //setTimeout(stopVideo, 6000);
+            //done = true;
+        }
+
+        // music ended
+        if (event.data == YT.PlayerState.ENDED) {
+            // todo: 
+            // inform server that the song has ended
+            // the server will then inform Joi device which will manage the workflow
+
+            // hardcoded test
+            setTimeout(onReceiveServertMessage,1000)
+        }
+
+    }
+    
+    function playVideoById(videoId) {
+        player.loadVideoById({'videoId': videoId,'startSeconds': 0,'endSeconds': 5});        
+    }
+
+    function stopVideo() {
+        player.stopVideo();
+    }
+
+    // handle messages coming in from the server via WebSockets
+    // this allows the server to control what is happening on the browser client
+    function onReceiveServertMessage(event) {
+        // todo: 
+
+        // hardcoded test
+        playVideoById('U_3nyOueehs')
+    }
+    
+</script>

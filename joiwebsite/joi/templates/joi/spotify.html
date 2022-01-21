@@ -1,0 +1,59 @@
+{% extends "joi/base.html" %}
+
+{% block content %}
+
+<div>
+    <button id="togglePlay">Toggle Play</button>
+    <script src="https://sdk.scdn.co/spotify-player.js"></script>
+    <script>
+        window.onSpotifyWebPlaybackSDKReady = () => {
+            const token = 'BQDEZ9cWc2NogHD-Qi1d3cQhHbvwnNyCDdOlWQagP34pFji_ICLH8o-br9ZIxtem7Qv2h42YvCWOpkdASwS7Nv6ZdsMIKFfVlfYsit3n6ACLoqfzVEj3bsOYgRizmSAfo8TltotIyqYoXG_U0O_byPDdwU1hpAv6Zmt_0Pfswz7K2dDtat64Vj0';
+            const player = new Spotify.Player({
+                name: 'Web Playback SDK Quick Start Player',
+                getOAuthToken: cb => { cb(token); },
+                volume: 0.5
+            });
+
+            // Ready
+            player.addListener('ready', ({ device_id }) => {
+                console.log('Ready with Device ID', device_id);
+            });
+
+            // Not Ready
+            player.addListener('not_ready', ({ device_id }) => {
+                console.log('Device ID has gone offline', device_id);
+            });
+
+            player.addListener('initialization_error', ({ message }) => {
+                console.error(message);
+            });
+
+            player.addListener('authentication_error', ({ message }) => {
+                console.error(message);
+            });
+
+            player.addListener('account_error', ({ message }) => {
+                console.error(message);
+            });
+
+            document.getElementById('togglePlay').onclick = function() {
+              player.togglePlay();
+            };
+
+            player.connect();
+
+
+
+
+    play({
+    playerInstance: new Spotify.Player({ name: "..." }),
+    spotify_uri: 'spotify:track:7xGfFoTpQ2E7fRF5lN10tr',
+    });   
+
+        }
+
+     
+    </script>
+</div>
+
+{% endblock %}

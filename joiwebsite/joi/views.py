@@ -5,6 +5,12 @@ def index(request):
     context = {}
     return render(request, 'joi/home.html', context)    
 
-def music(request):
+def youtubemusic(request):
     context = {}
-    return render(request, 'joi/music.html', context)    
+    return render(request, 'joi/youtubemusic.html', context)    
+
+def spotify(request):
+    context = {}
+    return render(request, 'joi/spotify.html', context)        
+
+    
