@@ -12,22 +12,29 @@
         <span id="message" style="color: red;"></span>
     </div>
     <div>
-        <h1 id="artist_name"></h1>
-        <h2 id="album_name"></h2>
+        <h1 id="track_name"></h1>
+        <h2 id="artist_name"></h2>
+        <h3 id="album_name"></h3>
     </div>
     <div>
         <img id="album_image"/>
     </div>
     <script src="https://sdk.scdn.co/spotify-player.js"></script>
     <script>
+
+        const params = new Proxy(new URLSearchParams(window.location.search), {
+            get: (searchParams, prop) => searchParams.get(prop),
+        });
+
+        console.log(params);
+
         var spotify_device_id;
         var spotify_uri = 'spotify:track:2EPr9Wx7e1cpGEbNAtuN7x';
         var spotify_player = null;
         window.onSpotifyWebPlaybackSDKReady = () => {
-            const token = 'BQDfWOjNKwek-v7opU9n3TVUv4NlbXzsP4drI7VAhfb_1s6TgBB4no6HrCivo2cCsZXb7XB3AKoVFUFF4TAJ0X8rHXs3If2g-lIatKT1Q-32dZCdgW7-lGuhZNqIRmUIIyXgPLPOJaFp6t7QIoV9h_zYuow1se15U4pGYaf09p4wasJaFZps0fxvWpXYR4SKB0A';
             const player = new Spotify.Player({
-                name: 'Joi Web Player',
-                getOAuthToken: cb => { cb(token); },
+                name: params.name,
+                getOAuthToken: cb => { cb(params.token); },
                 volume: 0.5
             });
 
@@ -49,6 +56,7 @@
                 var album_image = album.images[0];
 
                 document.getElementById("artist_name").textContent = artist.name;
+                document.getElementById("track_name").textContent = current_track.name;
                 document.getElementById("album_name").textContent = album.name;
                 document.getElementById("album_image").src = album_image.url;
 
