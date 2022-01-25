@@ -13,4 +13,6 @@ def spotify(request):
     context = {}
     return render(request, 'joi/spotify.html', context)        
 
-    
+def spotifycontroller(request):
+    context = {}
+    return render(request, 'joi/spotifycontroller.html', context)        

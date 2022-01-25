@@ -4,19 +4,63 @@
 
 <div>
     <button id="togglePlay">Toggle Play</button>
+    <div>
+        <span>Device ID : </span>
+        <span id="device_id"></span>
+    </div>
+    <div>
+        <span id="message" style="color: red;"></span>
+    </div>
+    <div>
+        <h1 id="artist_name"></h1>
+        <h2 id="album_name"></h2>
+    </div>
+    <div>
+        <img id="album_image"/>
+    </div>
     <script src="https://sdk.scdn.co/spotify-player.js"></script>
     <script>
+        var spotify_device_id;
+        var spotify_uri = 'spotify:track:2EPr9Wx7e1cpGEbNAtuN7x';
+        var spotify_player = null;
         window.onSpotifyWebPlaybackSDKReady = () => {
-            const token = 'BQDEZ9cWc2NogHD-Qi1d3cQhHbvwnNyCDdOlWQagP34pFji_ICLH8o-br9ZIxtem7Qv2h42YvCWOpkdASwS7Nv6ZdsMIKFfVlfYsit3n6ACLoqfzVEj3bsOYgRizmSAfo8TltotIyqYoXG_U0O_byPDdwU1hpAv6Zmt_0Pfswz7K2dDtat64Vj0';
+            const token = 'BQDfWOjNKwek-v7opU9n3TVUv4NlbXzsP4drI7VAhfb_1s6TgBB4no6HrCivo2cCsZXb7XB3AKoVFUFF4TAJ0X8rHXs3If2g-lIatKT1Q-32dZCdgW7-lGuhZNqIRmUIIyXgPLPOJaFp6t7QIoV9h_zYuow1se15U4pGYaf09p4wasJaFZps0fxvWpXYR4SKB0A';
             const player = new Spotify.Player({
-                name: 'Web Playback SDK Quick Start Player',
+                name: 'Joi Web Player',
                 getOAuthToken: cb => { cb(token); },
                 volume: 0.5
             });
 
+            spotify_player = player;
+
+            player.addListener('player_state_changed', ({
+                position,
+                duration,
+                paused,
+                track_window: { current_track }
+            }) => {
+                console.log('Currently Playing', current_track);
+                console.log('Position in Song', position);
+                console.log('Duration of Song', duration);
+                console.log('Paused', paused);
+
+                var artist = current_track.artists[0];
+                var album = current_track.album;
+                var album_image = album.images[0];
+
+                document.getElementById("artist_name").textContent = artist.name;
+                document.getElementById("album_name").textContent = album.name;
+                document.getElementById("album_image").src = album_image.url;
+
+            });   
+
             // Ready
             player.addListener('ready', ({ device_id }) => {
                 console.log('Ready with Device ID', device_id);
+                spotify_device_id = device_id;
+                document.getElementById("device_id").textContent=device_id;
+
+                document.getElementById('togglePlay').click();
             });
 
             // Not Ready
@@ -36,21 +80,48 @@
                 console.error(message);
             });
 
+            player.addListener('autoplay_failed', () => {
+                console.log('Autoplay is not allowed by the browser autoplay rules');
+                document.getElementById('message').textContent = 'Autoplay is not allowed by the browser autoplay rules';
+            });
+
             document.getElementById('togglePlay').onclick = function() {
               player.togglePlay();
             };
 
             player.connect();
 
+            // function playSong() {
+            //     fetch(`https://api.spotify.com/v1/me/player/play?device_id=${spotify_device_id}`, {
+            //         method: 'PUT',
+            //         body: JSON.stringify({ uris: [spotify_uri] }),
+            //         headers: {
+            //             'Content-Type': 'application/json',
+            //             'Authorization': `Bearer ${token}`
+            //         },
+            //     });
+            // }
 
+            // function getCurrentState() {
+            //     player.getCurrentState().then(state => {
+            //         if (!state) {
+            //             console.error('User is not playing music through the Web Playback SDK');
+            //             return;
+            //         }
 
+            //         // get current track info
+            //         var current_track = state.track_window.current_track;
+            //         // get a list of album images
+            //         var images = current_track.album.images;
 
-    play({
-    playerInstance: new Spotify.Player({ name: "..." }),
-    spotify_uri: 'spotify:track:7xGfFoTpQ2E7fRF5lN10tr',
-    });   
+            //         console.log('Currently Playing', current_track);
+            //         console.log('Images', images);
+
+            //     });
+            // }
 
         }
+
 
      
     </script>
