@@ -3,21 +3,27 @@
 {% block content %}
 
 <div>
-    <button id="togglePlay">Toggle Play</button>
     <div>
-        <span>Device ID : </span>
-        <span id="device_id"></span>
+        <div style="display: inline-block; vertical-align: top;">
+            <button id="togglePlay" style="font-size:74px;width:100px;"><i id="playIcon" class="fa fa-play"></i></button>
+        </div>
+        <div style="display: inline-block; margin-left: 20px;">
+            <div style="display: none;">
+                <span>Device ID : </span>
+                <span id="device_id"></span>
+            </div>
+            <div>
+                <span id="message" style="color: red;"></span>
+            </div>
+            <div>
+                <h1 id="track_name" style="margin:0;">Song Name</h1>
+                <h2 id="artist_name" style="margin:0;">Artist Name</h2>
+                <h3 id="album_name" style="margin:0;">Album Name</h3>
+            </div>
+        </div>
     </div>
     <div>
-        <span id="message" style="color: red;"></span>
-    </div>
-    <div>
-        <h1 id="track_name"></h1>
-        <h2 id="artist_name"></h2>
-        <h3 id="album_name"></h3>
-    </div>
-    <div>
-        <img id="album_image"/>
+        <img id="album_image" style="height:90%;" src="https://i.discogs.com/IOSpXBspmEHi1IU--iSqy8La9r2qTMx_waitx524cGs/rs:fit/g:sm/q:90/h:591/w:600/czM6Ly9kaXNjb2dz/LWltYWdlcy9SLTYw/MDg3NzgtMTQwODkw/NDEwMC01OTY0Lmpw/ZWc.jpeg"/>
     </div>
     <script src="https://sdk.scdn.co/spotify-player.js"></script>
     <script>
@@ -29,7 +35,6 @@
         console.log(params);
 
         var spotify_device_id;
-        var spotify_uri = 'spotify:track:2EPr9Wx7e1cpGEbNAtuN7x';
         var spotify_player = null;
         window.onSpotifyWebPlaybackSDKReady = () => {
             const player = new Spotify.Player({
@@ -50,6 +55,11 @@
                 console.log('Position in Song', position);
                 console.log('Duration of Song', duration);
                 console.log('Paused', paused);
+
+                if (paused) 
+                    document.getElementById("playIcon").className = "fa fa-play";
+                else 
+                    document.getElementById("playIcon").className = "fa fa-pause";
 
                 var artist = current_track.artists[0];
                 var album = current_track.album;
@@ -98,35 +108,6 @@
             };
 
             player.connect();
-
-            // function playSong() {
-            //     fetch(`https://api.spotify.com/v1/me/player/play?device_id=${spotify_device_id}`, {
-            //         method: 'PUT',
-            //         body: JSON.stringify({ uris: [spotify_uri] }),
-            //         headers: {
-            //             'Content-Type': 'application/json',
-            //             'Authorization': `Bearer ${token}`
-            //         },
-            //     });
-            // }
-
-            // function getCurrentState() {
-            //     player.getCurrentState().then(state => {
-            //         if (!state) {
-            //             console.error('User is not playing music through the Web Playback SDK');
-            //             return;
-            //         }
-
-            //         // get current track info
-            //         var current_track = state.track_window.current_track;
-            //         // get a list of album images
-            //         var images = current_track.album.images;
-
-            //         console.log('Currently Playing', current_track);
-            //         console.log('Images', images);
-
-            //     });
-            // }
 
         }
 
