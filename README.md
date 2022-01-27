@@ -1,4 +1,12 @@
-# joi
+# Joi Server
+This is part of the Joi project for University of Southern Indiana.
+The code in this repository holds server-side components such as the website and database.
+
+## Technologies
+* Python
+* Django
+* Postgres SQL
+* Azure
 
 ## Development Workstation Setup
 * Install Visual Studio Code
@@ -30,13 +38,13 @@
 ## Project Setup
 These are tasks that were run when the project was setup.  These are being documented for learning purposes.
 
-### Setup Website Project
+### Create Website Project
     django-admin startproject joiwebsite  
 
-### Setup Webstie App
+### Create Webstie App
     python manage.py startapp joi     
 
-## Azure Setup
+## Azure One-Time Setup
 Setup Django and Postgres on Azure - https://docs.microsoft.com/en-us/azure/app-service/tutorial-python-postgresql-app?tabs=bash%2Cclone&pivots=postgres-single-server
 
 * az login
@@ -46,32 +54,33 @@ Setup Django and Postgres on Azure - https://docs.microsoft.com/en-us/azure/app-
 * az webapp config appsettings set --settings DBHOST="cognivista-joi" DBUSER="<admin-username>" DBPASS="EryFe3hB2C_Q" DBNAME="<admin-password>"
 * az webapp ssh
 
+
 ### Custom Startup Command
 Because the Django project is not organized the way Azure wants, set the Startup Command of the web app.  This is located in Configuration, General settings on the Azure Portal.
     gunicorn --bind=0.0.0.0 --timeout 600 --chdir joiwebsite joiwebsite.wsgi
-
-### Redeploy code to Azure
-    az webapp up
 
 ## Management Commands
 
 ### Run Development Web Server
     python manage.py runserver  
 
-### Database Migration
+### Start Django Shell
+    python manage.py shell
 
-#### Create Migration
+### Create Database Migration
 Create a migration when you have changed model code
     python manage.py makemigrations joi
 
-#### Apply Migrations
+### Apply Database Migrations
 Apply outstanding migrations to the database
     python manage.py migrate     
 
-#### Start Django Shell
-    python manage.py shell
+### Redeploy code to Azure
+    az webapp up
+
 
 ## Chrome Configure
+These instructions are for the Spotify Web Playback
 
 ### Allow Sound to Auto Play
 Chromse does not allow videos to automatically play (autoplay).  This can be overridden in settings.
