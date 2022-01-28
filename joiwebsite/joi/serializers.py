@@ -31,7 +31,7 @@ class CarePartnerSerializer(serializers.ModelSerializer):
         model = models.CarePartner
         fields = '__all__'
 
-class CarePartnerResidentrSerializer(serializers.ModelSerializer):
+class CarePartnerResidentSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.CarePartnerResident
         fields = '__all__'

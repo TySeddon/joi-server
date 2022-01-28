@@ -33,6 +33,7 @@ The code in this repository holds server-side components such as the website and
     pip install djangorestframework
     pip install pyyaml
     pip install django-filter
+    pip install munch
 
 ## Update requirements.txt
     pip freeze > requirements.txt

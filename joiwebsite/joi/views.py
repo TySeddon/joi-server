@@ -109,3 +109,13 @@ class ResidentAuthorizedViewSet(viewsets.ModelViewSet):
             queryset = self.get_queryset().filter(resident_id__in=residents)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)   
+
+class CarePartnerResidentViewSet(ResidentAuthorizedViewSet):
+    """
+    API endpoint that allows Residents to be viewed or edited.
+    Admins and Researchers can view and edit Residents
+    CarePartners can only view their Residents
+    Residents can only view themselves
+    """
+    queryset = models.CarePartnerResident.objects.all()
+    serializer_class = serializers.CarePartnerResidentSerializer
