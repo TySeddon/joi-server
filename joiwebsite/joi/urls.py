@@ -12,6 +12,7 @@ ROUTER = routers.DefaultRouter()
 ROUTER.register(r'users', views.UserViewSet)
 ROUTER.register(r'groups', views.GroupViewSet)
 ROUTER.register(r'residents', views.ResidentViewSet)
+ROUTER.register(r'memoryboxtypes', views.MemoryBoxTypeViewSet)
 
 urlpatterns = [
     path('', views.index, name='index'),

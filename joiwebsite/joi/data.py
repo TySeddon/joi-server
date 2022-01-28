@@ -21,10 +21,16 @@ UUID_5 = uuid.UUID("00000000-0000-0000-0000-000000000005")
 #         return uuid.UUID("00000000-0000-0000-0000-000000000003")
 
 def delete_data():
-    User.objects.delete()
+    models.CarePartnerResident.objects.all().delete()
+    models.CarePartner.objects.all().delete()
+    models.Resident.objects.all().delete()
+    User.objects.all().delete()
 
 def initialize_data():
     create_users()
+    create_residents()
+    create_carepartners()
+    create_carepartnerresidents()
 
 def create_users():
     User.objects.all().delete()
@@ -38,7 +44,7 @@ def create_users():
 def create_residents():
     models.Resident.objects.all().delete()
 
-    models.Sensor.objects.bulk_create(
+    models.Resident.objects.bulk_create(
         [
             models.Resident(
                 resident_id=UUID_1,

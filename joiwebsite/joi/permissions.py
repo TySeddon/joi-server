@@ -4,19 +4,22 @@ import joi.models as models
 class IsCarePartnerOfResident(permissions.BasePermission):
     """
     Custom permission to only allow CarePartners of Resident to view and edit Resident's data
+    Admins have access.
     This permission should only be applied to objects that have a "resident" field.
-
-    request.carepartner should be set to the CarePartner object of the current user
-    If current user is not a CarePartner, then set to None
     """
     def has_object_permission(self, request, view, obj):
         # see: https://stackoverflow.com/questions/58224089/django-rest-framework-custom-permission-class-with-manytomanyfield
         # get the care partner object for the currently logged in user
         # if they are not a CarePartner (i.e. Admin or Researcher) then is None
-        #user_carepartner = models.CarePartner.objects.filter(user=request.user).first()
-        if request.carepartner is not None:
-            # see if this CarePartner is associated with Resident of this object
-            return models.CarePartnerResident.objects.filter(resident=obj.resident, carepartner=request.carepartner).any()
+        if permissions.IsAdminUser().has_permission(request,view):
+            return True
+        else:
+            user_carepartner = models.CarePartner.objects.filter(user=request.user).first()
+            if user_carepartner is not None:
+                # see if this CarePartner is associated with Resident of this object
+                return models.CarePartnerResident.objects.filter(resident_id=obj.resident_id, carepartner=user_carepartner).exists()
+            else:
+                return False
 
 class IsOwner(permissions.BasePermission):
     """

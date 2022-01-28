@@ -6,7 +6,7 @@ from rest_framework import exceptions, viewsets, permissions, status, generics
 from rest_framework.response import Response
 import joi.models as models
 import joi.serializers as serializers
-from joi.permissions import IsOwnerOrAdmin, IsAdminOrReadOnly
+from joi.permissions import IsOwnerOrAdmin, IsAdminOrReadOnly, IsCarePartnerOfResident
 
 
 def index(request):
@@ -19,7 +19,7 @@ def spotify(request):
 
 class UserViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows users to be viewed or edited.
+    API endpoint that allows Users to be viewed or edited.
     Anyone can POST to create a new user.  All other operations require authentication and authorization.
     Users can only view their user account.  Admins can see all users.
     """
@@ -45,17 +45,36 @@ class UserViewSet(viewsets.ModelViewSet):
 
 class GroupViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows groups to be viewed or edited.
+    API endpoint that allows Groups to be viewed or edited.
     Only admins can view and edit groups.
     """
     permission_classes = [permissions.IsAuthenticated,permissions.IsAdminUser]    
     queryset = Group.objects.all()
     serializer_class = serializers.GroupSerializer
-    
+
 class ResidentViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows Residents to be viewed or edited.
+    Admins and Researchers can view and edit Residents
+    CarePartners can only view their Residents
+    Residents can only view themselves
+    """
     queryset = models.Resident.objects.all()
     serializer_class = serializers.ResidentSerializer
-    permission_classes = [permissions.IsAuthenticated, IsAdminOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsCarePartnerOfResident]
+
+    def list(self, request, *args, **kwargs):
+        if not bool(request.user and request.user.is_authenticated):
+            raise exceptions.NotAuthenticated()
+        queryset = None
+        if request.user.is_staff:                
+            queryset = self.get_queryset()
+        else:
+            user_carepartner = models.CarePartner.objects.filter(user=request.user).first()
+            residents = models.CarePartnerResident.objects.filter(carepartner=user_carepartner)
+            queryset = self.get_queryset().filter(resident_id__in=residents)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)       
 
 # will need to create some custom permission classes to handle the
 # many-to-many relationship between resident and carepartner
@@ -65,3 +84,28 @@ class ResidentViewSet(viewsets.ModelViewSet):
 # If researcher, allow all
 # if admin, allow all
 
+class MemoryBoxTypeViewSet(viewsets.ModelViewSet):
+    queryset = models.MemoryBoxType.objects.all()
+    serializer_class = serializers.MemoryBoxTypeSerializer
+    permission_classes = [permissions.IsAuthenticated, IsAdminOrReadOnly]
+
+class ResidentAuthorizedViewSet(viewsets.ModelViewSet):
+    """
+    Base class for objects that are associated with a Resident
+    and should only be viewable and editable by associated CarePartners
+    """
+    permission_classes = [permissions.IsAuthenticated, IsCarePartnerOfResident]
+    filterset_fields = ['resident']
+
+    def list(self, request, *args, **kwargs):
+        if not bool(request.user and request.user.is_authenticated):
+            raise exceptions.NotAuthenticated()
+        queryset = None
+        if request.user.is_staff:                
+            queryset = self.get_queryset()
+        else:
+            user_carepartner = models.CarePartner.objects.filter(user=request.user).first()
+            residents = models.CarePartnerResident.objects.filter(carepartner=user_carepartner)
+            queryset = self.get_queryset().filter(resident_id__in=residents)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)   

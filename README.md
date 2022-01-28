@@ -79,7 +79,11 @@ Create a migration when you have changed model code
 
 ### Apply Database Migrations
 Apply outstanding migrations to the database
-    python manage.py migrate     
+    python manage.py migrate   
+
+### Custom Management Commands
+python manage.py delete_data
+python manage.py initialize_data      
 
 ### Redeploy code to Azure
     az webapp up
