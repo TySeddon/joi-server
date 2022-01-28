@@ -30,6 +30,8 @@ The code in this repository holds server-side components such as the website and
     pip install 'django==3.2.11'
     pip install psycopg2
     pip install whitenoise
+    pip install djangorestframework
+    pip install pyyaml
 
 ## Update requirements.txt
     pip freeze > requirements.txt
