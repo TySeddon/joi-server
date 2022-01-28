@@ -32,6 +32,7 @@ The code in this repository holds server-side components such as the website and
     pip install whitenoise
     pip install djangorestframework
     pip install pyyaml
+    pip install django-filter
 
 ## Update requirements.txt
     pip freeze > requirements.txt
@@ -68,6 +69,9 @@ Because the Django project is not organized the way Azure wants, set the Startup
 
 ### Start Django Shell
     python manage.py shell
+
+### Run Tests
+    python manage.py test
 
 ### Create Database Migration
 Create a migration when you have changed model code

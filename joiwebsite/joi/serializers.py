@@ -5,7 +5,7 @@ This provides the translation between domain models (REST API) and data model (S
 
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-import joiwebsite.joi.models as models
+import joi.models as models
 
 # https://docs.djangoproject.com/en/2.2/topics/serialization/
 # https://www.django-rest-framework.org/api-guide/serializers
