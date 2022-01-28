@@ -22,3 +22,11 @@ class ResidentViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ResidentSerializer
     permission_classes = [permissions.IsAuthenticated, IsAdminOrReadOnly]
 
+# will need to create some custom permission classes to handle the
+# many-to-many relationship between resident and carepartner
+# If carepartner, then use user to lookup relationships and see if resident is in the list
+# https://stackoverflow.com/questions/58224089/django-rest-framework-custom-permission-class-with-manytomanyfield
+# If resident, simply look at the resident field of the table you are querying
+# If researcher, allow all
+# if admin, allow all
+
