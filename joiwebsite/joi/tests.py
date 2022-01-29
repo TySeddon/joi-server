@@ -26,11 +26,7 @@ def response_to_object(response):
     return munchify(json.loads(response.content))
 
 def get_userid_by_username(username):
-    user = User.objects.filter(username=username).first()
-    if user is not None:
-        return user.id
-    else:
-        return None
+    return User.objects.filter(username=username).first().id
 
 ### End Helper Functions ##############################
 
@@ -78,15 +74,39 @@ class UserTestCase(TestCase):
         response = c.get(USERS_URL)
         self.assertEqual(200, response.status_code)
         objs = response_to_list(response)
-        self.assertEqual(3, len(objs))
+        self.assertEqual(4, len(objs))
 
-    def test_get_user_1_by_admin_1(self):
+    def test_get_cp_1_by_admin_1(self):
         c = create_client('admin_1','testpassword')
         user_id = get_userid_by_username('cp_1')
         response = c.get('%s%s/' % (USERS_URL,user_id))
         self.assertEqual(200, response.status_code)
         obj = response_to_object(response)
         self.assertEqual('cp_1', obj.username)
+
+    ### Researcher 1 ########################
+
+    def test_list_users_by_researcher_1(self):
+        c = create_client('researcher_1','testpassword')
+        response = c.get(USERS_URL)
+        self.assertEqual(200, response.status_code)
+        objs = response_to_list(response)
+        self.assertEqual(1, len(objs))
+        self.assertEqual('researcher_1', objs[0].username)
+
+    def test_get_researcher_1_by_researcher_1(self):
+        c = create_client('researcher_1','testpassword')
+        user_id = get_userid_by_username('researcher_1')
+        response = c.get('%s%s/' % (USERS_URL,user_id))
+        self.assertEqual(200, response.status_code)
+        obj = response_to_object(response)
+        self.assertEqual('researcher_1', obj.username)
+
+    def test_get_cp_1_by_researcher_1(self):
+        c = create_client('researcher_1','testpassword')
+        user_id = get_userid_by_username('cp_1')
+        response = c.get('%s%s/' % (USERS_URL,user_id))
+        self.assertEqual(403, response.status_code)
 
     ### Care Partner 1 ########################
 
@@ -98,7 +118,7 @@ class UserTestCase(TestCase):
         self.assertEqual(1, len(objs))
         self.assertEqual('cp_1', objs[0].username)
 
-    def test_get_user_1_by_carepartner_1(self):
+    def test_get_cp_1_by_carepartner_1(self):
         c = create_client('cp_1','testpassword')
         user_id = get_userid_by_username('cp_1')
         response = c.get('%s%s/' % (USERS_URL,user_id))
@@ -106,7 +126,7 @@ class UserTestCase(TestCase):
         obj = response_to_object(response)
         self.assertEqual('cp_1', obj.username)
 
-    def test_get_user_2_by_carepartner_1(self):
+    def test_get_cp_2_by_carepartner_1(self):
         c = create_client('cp_1','testpassword')
         user_id = get_userid_by_username('cp_2')
         response = c.get('%s%s/' % (USERS_URL,user_id))
@@ -122,7 +142,7 @@ class UserTestCase(TestCase):
         self.assertEqual(1, len(objs))
         self.assertEqual('cp_2', objs[0].username)
 
-    def test_get_users_2_by_carepartner_2(self):
+    def test_get_cp_2_by_carepartner_2(self):
         c = create_client('cp_2','testpassword')
         user_id = get_userid_by_username('cp_2')
         response = c.get('%s%s/' % (USERS_URL,user_id))
@@ -130,7 +150,7 @@ class UserTestCase(TestCase):
         obj = response_to_object(response)
         self.assertEqual('cp_2', obj.username)
 
-    def test_get_users_1_by_carepartner_2(self):
+    def test_get_cp_1_by_carepartner_2(self):
         c = create_client('cp_2','testpassword')
         user_id = get_userid_by_username('cp_1')
         response = c.get('%s%s/' % (USERS_URL,user_id))
@@ -167,6 +187,29 @@ class ResidentTestCase(TestCase):
         self.assertEqual(200, response.status_code)
         obj = response_to_object(response)
         self.assertEqual(str(data.UUID_2), obj.resident_id)        
+
+    ### Researcher 1 ########################
+
+    def test_list_resident_by_researcher_1(self):
+        c = create_client('researcher_1','testpassword')
+        response = c.get(RESIDENTS_URL)
+        self.assertEqual(200, response.status_code)
+        objs = response_to_list(response)
+        self.assertEqual(2, len(objs))
+
+    def test_get_resident_1_by_researcher_1(self):
+        c = create_client('researcher_1','testpassword')
+        response = c.get('%s%s/' % (RESIDENTS_URL,data.UUID_1))
+        self.assertEqual(200, response.status_code)
+        obj = response_to_object(response)
+        self.assertEqual(str(data.UUID_1), obj.resident_id)        
+
+    def test_get_resident_2_by_researcher_1(self):
+        c = create_client('researcher_1','testpassword')
+        response = c.get('%s%s/' % (RESIDENTS_URL,data.UUID_2))
+        self.assertEqual(200, response.status_code)
+        obj = response_to_object(response)
+        self.assertEqual(str(data.UUID_2), obj.resident_id)   
 
     ### Care Partner 1 ########################
 
@@ -239,6 +282,29 @@ class CarePartnerResidentTestCase(TestCase):
 
     def test_get_carepartnerresident_2_by_admin_1(self):
         c = create_client('admin_1','testpassword')
+        response = c.get('%s%s/' % (CAREPARTNER_RESIDENTS_URL,data.UUID_2))
+        self.assertEqual(200, response.status_code)
+        obj = response_to_object(response)
+        self.assertEqual(str(data.UUID_2), obj.resident)
+
+    ### Researcher 1 ########################
+
+    def test_list_carepartnerresident_by_researcher_1(self):
+        c = create_client('researcher_1','testpassword')
+        response = c.get(CAREPARTNER_RESIDENTS_URL)
+        self.assertEqual(200, response.status_code)
+        objs = response_to_list(response)
+        self.assertEqual(2, len(objs))
+
+    def test_get_carepartnerresident_1_by_researcher_1(self):
+        c = create_client('researcher_1','testpassword')
+        response = c.get('%s%s/' % (CAREPARTNER_RESIDENTS_URL,data.UUID_1))
+        self.assertEqual(200, response.status_code)
+        obj = response_to_object(response)
+        self.assertEqual(str(data.UUID_1), obj.resident)
+
+    def test_get_carepartnerresident_2_by_researcher_1(self):
+        c = create_client('researcher_1','testpassword')
         response = c.get('%s%s/' % (CAREPARTNER_RESIDENTS_URL,data.UUID_2))
         self.assertEqual(200, response.status_code)
         obj = response_to_object(response)

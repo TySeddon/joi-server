@@ -2,7 +2,7 @@ import uuid
 import datetime
 import pytz
 #from django.contrib.gis.geos import Point
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 import joi.models as models
 
 UUID_0 = uuid.UUID("00000000-0000-0000-0000-000000000000")
@@ -25,12 +25,24 @@ def delete_data():
     models.CarePartner.objects.all().delete()
     models.Resident.objects.all().delete()
     User.objects.all().delete()
+    Group.objects.all().delete()
 
 def initialize_data():
+    create_groups()
     create_users()
     create_residents()
     create_carepartners()
     create_carepartnerresidents()
+
+def create_groups():
+    Group.objects.all().delete()
+
+    Group.objects.bulk_create(
+        [
+            Group(name='Researcher')
+        ]
+    )
+
 
 def create_users():
     User.objects.all().delete()
@@ -38,6 +50,15 @@ def create_users():
     # create admin user for testing
     User.objects.create_user(
         username="admin_1", email='admin_1@cognivista.com', password='testpassword', is_staff=True).save()
+
+    # create researcher for testing
+    User.objects.create_user(
+        username="researcher_1", email='researcher_1@cognivista.com', password='testpassword').save()
+    # add researcher_1 to Research group
+    researcher_1 = User.objects.get(username='researcher_1')
+    researcher_group = Group.objects.get(name='Researcher')
+    researcher_1.groups.add(researcher_group)
+
 
     # create CarePartner Users for testing
     User.objects.create_user(

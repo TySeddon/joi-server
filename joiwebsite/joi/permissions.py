@@ -1,6 +1,9 @@
 from rest_framework import permissions
 import joi.models as models
 
+def is_member(user, group_name):
+    return user.groups.filter(name=group_name).exists()
+
 class IsCarePartnerOfResident(permissions.BasePermission):
     """
     Custom permission to only allow CarePartners of Resident to view and edit Resident's data
@@ -10,6 +13,8 @@ class IsCarePartnerOfResident(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if permissions.IsAdminUser().has_permission(request,view):
             return True
+        elif is_member(request.user,'Researcher'):
+            return True            
         else:
             # get CarePartner object for current user
             user_carepartner = models.CarePartner.objects.filter(user=request.user).first()

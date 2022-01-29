@@ -6,8 +6,7 @@ from rest_framework import exceptions, viewsets, permissions, status, generics
 from rest_framework.response import Response
 import joi.models as models
 import joi.serializers as serializers
-from joi.permissions import IsOwnerOrAdmin, IsAdminOrReadOnly, IsCarePartnerOfResident
-
+from joi.permissions import IsOwnerOrAdmin, IsAdminOrReadOnly, IsCarePartnerOfResident, is_member
 
 def index(request):
     context = {}
@@ -29,8 +28,8 @@ class ResidentAuthorizedViewSet(viewsets.ModelViewSet):
         if not bool(request.user and request.user.is_authenticated):
             raise exceptions.NotAuthenticated()
         queryset = None
-        if request.user.is_staff:                
-            # if Admin, then show all data
+        if request.user.is_staff or is_member(request.user,'Researcher'):          
+            # if Admin or Researcher, then show all data
             queryset = self.get_queryset()
         else:
             # get CarePartner object for current user
