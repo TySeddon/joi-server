@@ -47,7 +47,7 @@ class IsOwnerOrAdmin(permissions.BasePermission):
     """
 
     def has_object_permission(self, request, view, obj):
-        if request.path.startswith('/net/v1/users/'):
+        if request.path.startswith('/joi/v1/users/'):
             return obj.id == request.user.id or permissions.IsAdminUser().has_permission(request,view)
         else:
             return obj.user == request.user or permissions.IsAdminUser().has_permission(request,view)

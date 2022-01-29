@@ -60,11 +60,7 @@ class UserViewSet(viewsets.ModelViewSet):
         if not bool(request.user and request.user.is_authenticated):
             raise exceptions.NotAuthenticated()
         queryset = None
-        userid = self.request.query_params.get('user')
-        if userid is not None:
-            if int(userid) == request.user.id or request.user.is_staff:
-                queryset = self.get_queryset().filter(id=userid)
-        elif request.user.is_staff:                
+        if request.user.is_staff:                
             queryset = self.get_queryset()
         else:
             queryset = self.get_queryset().filter(id=request.user.id)
@@ -89,15 +85,6 @@ class ResidentViewSet(ResidentAuthorizedViewSet):
     """
     queryset = models.Resident.objects.all()
     serializer_class = serializers.ResidentSerializer
-    permission_classes = [permissions.IsAuthenticated, IsCarePartnerOfResident]
-
-# will need to create some custom permission classes to handle the
-# many-to-many relationship between resident and carepartner
-# If carepartner, then use user to lookup relationships and see if resident is in the list
-# https://stackoverflow.com/questions/58224089/django-rest-framework-custom-permission-class-with-manytomanyfield
-# If resident, simply look at the resident field of the table you are querying
-# If researcher, allow all
-# if admin, allow all
 
 class MemoryBoxTypeViewSet(viewsets.ModelViewSet):
     queryset = models.MemoryBoxType.objects.all()

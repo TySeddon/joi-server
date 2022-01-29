@@ -35,7 +35,11 @@ def initialize_data():
 def create_users():
     User.objects.all().delete()
 
-    # create CarePartner Users
+    # create admin user for testing
+    User.objects.create_user(
+        username="admin_1", email='admin_1@cognivista.com', password='testpassword', is_staff=True).save()
+
+    # create CarePartner Users for testing
     User.objects.create_user(
         username="cp_1", email='cp_1@cognivista.com', password='testpassword').save()
     User.objects.create_user(
