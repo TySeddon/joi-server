@@ -5,6 +5,7 @@ from munch import munchify
 import json
 
 RESIDENTS_URL = '/joi/v1/residents/'
+CAREPARTNER_RESIDENTS_URL = '/joi/v1/carepartnerresidents/'
 
 def create_client(username, password):
     c = Client()
@@ -95,3 +96,57 @@ class ResidentTestCase(TestCase):
         c = create_client('cp_2','testpassword')
         response = c.get('%s%s/' % (RESIDENTS_URL,data.UUID_1))
         self.assertEqual(403, response.status_code)
+
+
+class CarePartnerResidentTestCase(TestCase):
+    def setUp(self):
+        data.initialize_data()
+
+    def test_list_carepartnerresident_by_anonymous(self):
+        c = create_client(None,None)
+        response = c.get(CAREPARTNER_RESIDENTS_URL)
+        self.assertEqual(401, response.status_code)
+
+    ### Care Partner 1 ########################
+
+    def test_list_carepartnerresident_by_carepartner_1(self):
+        c = create_client('cp_1','testpassword')
+        response = c.get(CAREPARTNER_RESIDENTS_URL)
+        self.assertEqual(200, response.status_code)
+        objs = response_to_list(response)
+        self.assertEqual(1, len(objs))
+        self.assertEqual(str(data.UUID_1), objs[0].resident)
+
+    def test_get_carepartnerresident_1_by_carepartner_1(self):
+        c = create_client('cp_1','testpassword')
+        response = c.get('%s%s/' % (CAREPARTNER_RESIDENTS_URL,data.UUID_1))
+        self.assertEqual(200, response.status_code)
+        obj = response_to_object(response)
+        self.assertEqual(str(data.UUID_1), obj.resident)
+
+    def test_get_carepartnerresident_2_by_carepartner_1(self):
+        c = create_client('cp_1','testpassword')
+        response = c.get('%s%s/' % (CAREPARTNER_RESIDENTS_URL,data.UUID_2))
+        self.assertEqual(403, response.status_code)
+
+    ### Care Partner 2 ########################
+
+    def test_list_carepartnerresident_by_carepartner_2(self):
+        c = create_client('cp_2','testpassword')
+        response = c.get(CAREPARTNER_RESIDENTS_URL)
+        self.assertEqual(200, response.status_code)
+        objs = response_to_list(response)
+        self.assertEqual(1, len(objs))
+        self.assertEqual(str(data.UUID_2), objs[0].resident)
+
+    def test_get_carepartnerresident_2_by_carepartner_2(self):
+        c = create_client('cp_2','testpassword')
+        response = c.get('%s%s/' % (CAREPARTNER_RESIDENTS_URL,data.UUID_2))
+        self.assertEqual(200, response.status_code)
+        obj = response_to_object(response)
+        self.assertEqual(str(data.UUID_2), obj.resident)
+
+    def test_get_carepartnerresident_1_by_carepartner_2(self):
+        c = create_client('cp_2','testpassword')
+        response = c.get('%s%s/' % (CAREPARTNER_RESIDENTS_URL,data.UUID_1))
+        self.assertEqual(403, response.status_code)        

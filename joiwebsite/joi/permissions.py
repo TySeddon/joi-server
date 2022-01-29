@@ -8,12 +8,10 @@ class IsCarePartnerOfResident(permissions.BasePermission):
     This permission should only be applied to objects that have a "resident" field.
     """
     def has_object_permission(self, request, view, obj):
-        # see: https://stackoverflow.com/questions/58224089/django-rest-framework-custom-permission-class-with-manytomanyfield
-        # get the care partner object for the currently logged in user
-        # if they are not a CarePartner (i.e. Admin or Researcher) then is None
         if permissions.IsAdminUser().has_permission(request,view):
             return True
         else:
+            # get CarePartner object for current user
             user_carepartner = models.CarePartner.objects.filter(user=request.user).first()
             if user_carepartner is not None:
                 # see if this CarePartner is associated with Resident of this object
