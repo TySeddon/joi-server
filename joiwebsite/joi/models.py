@@ -70,7 +70,7 @@ class MemoryBox(models.Model):
     tags = models.CharField(max_length=255, null=True) # comma delimited list?
     is_active = models.BooleanField(null=False) # gives admin, researcher, or care partner ability to disable
 
-class MemmoryBoxSession(models.Model):
+class MemoryBoxSession(models.Model):
     """
     Represents a Resident's session with a memory box
     A session has a specific start and end 
@@ -94,7 +94,7 @@ class MemoryBoxSessionMedia(models.Model):
     within the context of a MemmoryBoxSession
     """
     memorybox_session_media_id = models.UUIDField(primary_key=True)
-    memorybox_session = models.ForeignKey(MemmoryBoxSession, on_delete=models.DO_NOTHING, null=False)
+    memorybox_session = models.ForeignKey(MemoryBoxSession, on_delete=models.DO_NOTHING, null=False)
     resident = models.ForeignKey(Resident, on_delete=models.DO_NOTHING, null=False)  # this breaks a rule of normalization.  Including it to keep it simpler for researchers to query
     media_url = models.CharField(max_length=2048, null=False)
     media_start_datetime = models.DateTimeField(null=False)

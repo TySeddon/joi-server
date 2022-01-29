@@ -85,11 +85,6 @@ class ResidentViewSet(ResidentAuthorizedViewSet):
     queryset = models.Resident.objects.all()
     serializer_class = serializers.ResidentSerializer
 
-class MemoryBoxTypeViewSet(viewsets.ModelViewSet):
-    queryset = models.MemoryBoxType.objects.all()
-    serializer_class = serializers.MemoryBoxTypeSerializer
-    permission_classes = [permissions.IsAuthenticated, IsAdminOrReadOnly]
-
 class CarePartnerResidentViewSet(ResidentAuthorizedViewSet):
     """
     API endpoint that allows Residents to be viewed or edited.
@@ -99,3 +94,49 @@ class CarePartnerResidentViewSet(ResidentAuthorizedViewSet):
     """
     queryset = models.CarePartnerResident.objects.all()
     serializer_class = serializers.CarePartnerResidentSerializer
+
+class DeviceViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows Devices to be viewed or edited.
+    All Devices are readonly.  Admins can edit them.
+    """
+    permission_classes = [permissions.IsAuthenticated,IsAdminOrReadOnly]    
+    queryset = models.Device.objects.all()
+    serializer_class = serializers.DeviceSerializer
+
+class MemoryBoxTypeViewSet(viewsets.ModelViewSet):
+    queryset = models.MemoryBoxType.objects.all()
+    serializer_class = serializers.MemoryBoxTypeSerializer
+    permission_classes = [permissions.IsAuthenticated, IsAdminOrReadOnly]
+
+class MemoryBoxViewSet(ResidentAuthorizedViewSet):
+    """
+    API endpoint that allows MemoryBox to be viewed or edited.
+    Admins and Researchers can view and edit all MemoryBoxes
+    CarePartners can only edit their Residents' MemoryBoxes
+    Residents can only view and edit their MemoryBoxes
+    """
+    queryset = models.MemoryBox.objects.all()
+    serializer_class = serializers.MemoryBoxSerializer    
+
+class MemoryBoxSessionViewSet(ResidentAuthorizedViewSet):
+    """
+    API endpoint that allows MemoryBoxSessions to be viewed or edited.
+    Admins and Researchers can view and edit all MemoryBoxSessions
+    CarePartners can only edit their Residents' MemoryBoxSessions
+    Residents can only view and edit their MemoryBoxSessions
+    """
+    queryset = models.MemoryBoxSession.objects.all()
+    serializer_class = serializers.MemoryBoxSessionSerializer      
+
+class MemoryBoxSessionMediaViewSet(ResidentAuthorizedViewSet):
+    """
+    """
+    queryset = models.MemoryBoxSessionMedia.objects.all()
+    serializer_class = serializers.MemoryBoxSessionMediaSerializer          
+
+class MediaInteractionViewSet(ResidentAuthorizedViewSet):
+    """
+    """
+    queryset = models.MediaInteraction.objects.all()
+    serializer_class = serializers.MediaInteractionSerializer              

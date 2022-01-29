@@ -51,9 +51,9 @@ class MemoryBoxSerializer(serializers.ModelSerializer):
         model = models.MemoryBox
         fields = '__all__'
 
-class MemmoryBoxSessionSerializer(serializers.ModelSerializer):
+class MemoryBoxSessionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.MemmoryBoxSession
+        model = models.MemoryBoxSession
         fields = '__all__'
 
 class MemoryBoxSessionMediaSerializer(serializers.ModelSerializer):

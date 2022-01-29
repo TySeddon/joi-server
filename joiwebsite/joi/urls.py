@@ -13,7 +13,13 @@ ROUTER.register(r'users', views.UserViewSet)
 ROUTER.register(r'groups', views.GroupViewSet)
 ROUTER.register(r'residents', views.ResidentViewSet)
 ROUTER.register(r'carepartnerresidents', views.CarePartnerResidentViewSet)
+ROUTER.register(r'devices', views.DeviceViewSet)
 ROUTER.register(r'memoryboxtypes', views.MemoryBoxTypeViewSet)
+ROUTER.register(r'memoryboxtypes', views.MemoryBoxTypeViewSet)
+ROUTER.register(r'memoryboxes', views.MemoryBoxViewSet)
+ROUTER.register(r'memoryboxsessions', views.MemoryBoxSessionViewSet)
+ROUTER.register(r'memoryboxsessionmedia', views.MemoryBoxSessionMediaViewSet)
+ROUTER.register(r'mediainteractions', views.MediaInteractionViewSet)
 
 urlpatterns = [
     path('', views.index, name='index'),
