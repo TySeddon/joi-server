@@ -128,3 +128,11 @@ class MediaInteraction(models.Model):
     carepartner_flag = models.BooleanField(null=False)  # care partner can flag this for follow-up
     researcher_flag = models.BooleanField(null=False) # researcher can flag this for follow-up
     researcher_notes = models.CharField(max_length=1024, null=True)
+
+class Slideshow(models.Model):
+    slideshow_id = models.UUIDField(primary_key=True)
+    media_id = models.CharField(max_length=255, null=False)  # google photo mediaItem.id
+    media_url = models.CharField(max_length=2048, null=False) # google photo mediaItem.baseUrl
+    tick_count = models.IntegerField(null=False)
+    ping_datetime = models.DateTimeField(null=False)
+

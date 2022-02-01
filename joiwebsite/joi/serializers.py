@@ -66,3 +66,7 @@ class MediaInteractionSerializer(serializers.ModelSerializer):
         model = models.MediaInteraction
         fields = '__all__'
 
+class SlideshowSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Slideshow
+        fields = '__all__'

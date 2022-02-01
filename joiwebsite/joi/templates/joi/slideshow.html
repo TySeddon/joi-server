@@ -1,0 +1,47 @@
+{% extends "joi/base.html" %}
+
+{% block content %}
+<div>
+    <img id="slideshow_image"/>
+</div>
+
+<script>
+
+    const params = new Proxy(new URLSearchParams(window.location.search), {
+        get: (searchParams, prop) => searchParams.get(prop),
+    });
+
+    const slideshow_id = params.id;
+    var last_media_id = '';
+
+    getPhoto();
+
+    const timer = setInterval(getPhoto, 1000)
+
+    function status(response) {
+        if (response.status >= 200 && response.status < 300) {
+            return Promise.resolve(response)
+        } else {
+            if (response.status == 404) 
+                clearInterval(timer);
+            return Promise.reject(new Error(response.statusText))
+        }
+    }    
+
+    function getPhoto() {
+        fetch(`/joi/v1/slideshows/${slideshow_id}/`)
+        .then(status)
+        .then(response=>response.json())
+        .then(data => {
+            //console.log(data);
+            if (data.media_id != last_media_id) {
+                document.getElementById("slideshow_image").src = data.media_url;
+            }
+        }).catch(error => {
+            console.log('Request failed', error);
+        })
+    }
+
+</script>
+
+{% endblock %}

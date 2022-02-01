@@ -16,6 +16,10 @@ def spotify(request):
     context = {}
     return render(request, 'joi/spotify.html', context)        
 
+def slideshow(request):
+    context = {}
+    return render(request, 'joi/slideshow.html', context)        
+
 class ResidentAuthorizedViewSet(viewsets.ModelViewSet):
     """
     Base class for objects that are associated with a Resident
@@ -140,3 +144,11 @@ class MediaInteractionViewSet(ResidentAuthorizedViewSet):
     """
     queryset = models.MediaInteraction.objects.all()
     serializer_class = serializers.MediaInteractionSerializer              
+
+class SlideshowViewSet(viewsets.ModelViewSet):
+    """
+    """
+    queryset = models.Slideshow.objects.all()
+    serializer_class = serializers.SlideshowSerializer                  
+    permission_classes = [permissions.AllowAny]  # todo: lock this down later
+

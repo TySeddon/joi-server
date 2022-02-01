@@ -20,10 +20,12 @@ ROUTER.register(r'memoryboxes', views.MemoryBoxViewSet)
 ROUTER.register(r'memoryboxsessions', views.MemoryBoxSessionViewSet)
 ROUTER.register(r'memoryboxsessionmedia', views.MemoryBoxSessionMediaViewSet)
 ROUTER.register(r'mediainteractions', views.MediaInteractionViewSet)
+ROUTER.register(r'slideshows', views.SlideshowViewSet)
 
 urlpatterns = [
     path('', views.index, name='index'),
     path('spotify', views.spotify, name='spotify'),
+    path('slideshow', views.slideshow, name='slideshow'),
     re_path(r'^(?P<version>v1)/', include(ROUTER.urls)),  
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
