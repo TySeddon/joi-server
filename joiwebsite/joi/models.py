@@ -1,3 +1,4 @@
+from email.policy import default
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -12,7 +13,8 @@ class Resident(models.Model):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True) # may or may not be associated with user
     first_name = models.CharField(max_length=50, null=False)
     last_name = models.CharField(max_length=50, null=False)
-    is_active = models.BooleanField(null=False) # gives admin ability to disable
+    is_active = models.BooleanField(null=False), # gives admin ability to disable (not currently using this)
+    knowledge_base_name = models.CharField(max_length=50, null=True)
 
 class CarePartner(models.Model):
     """
@@ -22,7 +24,7 @@ class CarePartner(models.Model):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True) # may or may not be associated with user
     first_name = models.CharField(max_length=50, null=False)
     last_name = models.CharField(max_length=50, null=False)
-    is_active = models.BooleanField(null=False) # gives admin ability to disable
+    is_active = models.BooleanField(null=False) # gives admin ability to disable (not currently using this)
 
 class CarePartnerResident(models.Model):
     """
@@ -42,7 +44,7 @@ class Device(models.Model):
     name = models.CharField(max_length=50, null=False) 
     description = models.CharField(max_length=255, null=True) 
     resident = models.ForeignKey(Resident, on_delete=models.DO_NOTHING, null=False) # the resident currently associated with this device
-    is_active = models.BooleanField(null=False) # gives admin ability to disable
+    is_active = models.BooleanField(null=False) # gives admin ability to disable  (not currently using this)
 
 class MemoryBoxType(models.Model):
     """
@@ -68,7 +70,7 @@ class MemoryBox(models.Model):
     description = models.CharField(max_length=255, null=True) 
     url = models.CharField(max_length=2048, null=False)  # reference to spotify playlist or google photos library/album
     tags = models.CharField(max_length=255, null=True) # comma delimited list?
-    is_active = models.BooleanField(null=False) # gives admin, researcher, or care partner ability to disable
+    is_active = models.BooleanField(null=False) # gives admin, researcher, or care partner ability to disable  (not currently using this)
 
 class MemoryBoxSession(models.Model):
     """
@@ -84,8 +86,8 @@ class MemoryBoxSession(models.Model):
     session_start_datetime = models.DateTimeField(null=False)
     session_end_datetime = models.DateTimeField(null=True)
     resident_self_reported_feeling = models.CharField(max_length=50, null=True)  # recorded at end of session
-    carepartner_flag = models.BooleanField(null=False)  # care partner can flag this for follow-up
-    researcher_flag = models.BooleanField(null=False) # researcher can flag this for follow-up
+    carepartner_flag = models.BooleanField(null=False, default=False)  # care partner can flag this for follow-up
+    researcher_flag = models.BooleanField(null=False, default=False) # researcher can flag this for follow-up
     researcher_notes = models.CharField(max_length=1024, null=True)
 
 class MemoryBoxSessionMedia(models.Model):
@@ -130,6 +132,7 @@ class MediaInteraction(models.Model):
     researcher_notes = models.CharField(max_length=1024, null=True)
 
 class Slideshow(models.Model):
+    """Table to facilitate communication between Joi device (Raspberry Pi) and Slideshow (web page server from Joi Server)"""
     slideshow_id = models.UUIDField(primary_key=True)
     media_id = models.CharField(max_length=255, null=False)  # google photo mediaItem.id
     media_url = models.CharField(max_length=2048, null=False) # google photo mediaItem.baseUrl

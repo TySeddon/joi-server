@@ -102,9 +102,9 @@ class CarePartnerResidentViewSet(ResidentAuthorizedViewSet):
 class DeviceViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Devices to be viewed or edited.
-    All Devices are readonly.  Admins can edit them.
+    All Devices are public readonly.  Admins can edit them.
     """
-    permission_classes = [permissions.IsAuthenticated,IsAdminOrReadOnly]    
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly,IsAdminOrReadOnly]    
     queryset = models.Device.objects.all()
     serializer_class = serializers.DeviceSerializer
 

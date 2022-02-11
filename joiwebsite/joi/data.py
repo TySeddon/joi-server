@@ -21,6 +21,7 @@ UUID_5 = uuid.UUID("00000000-0000-0000-0000-000000000005")
 #         return uuid.UUID("00000000-0000-0000-0000-000000000003")
 
 def delete_data():
+    models.Device.objects.all().delete()
     models.CarePartnerResident.objects.all().delete()
     models.CarePartner.objects.all().delete()
     models.Resident.objects.all().delete()
@@ -33,6 +34,7 @@ def initialize_data():
     create_residents()
     create_carepartners()
     create_carepartnerresidents()
+    create_devices()
 
 def create_groups():
     Group.objects.all().delete()
@@ -59,6 +61,11 @@ def create_users():
     researcher_group = Group.objects.get(name='Researcher')
     researcher_1.groups.add(researcher_group)
 
+    # create Resident Users for testing
+    User.objects.create_user(
+        username="ruth", email='joi-ruth@cognivista.com', password='testpassword').save()
+    User.objects.create_user(
+        username="bob", email='joi-bob@cognivista.com', password='testpassword').save()
 
     # create CarePartner Users for testing
     User.objects.create_user(
@@ -69,18 +76,23 @@ def create_users():
 def create_residents():
     models.Resident.objects.all().delete()
 
+    user_resident_1 = User.objects.filter(username="ruth").first()
+    user_resident_2 = User.objects.filter(username="bob").first()
+
     models.Resident.objects.bulk_create(
         [
             models.Resident(
                 resident_id=UUID_1,
                 first_name="Ruth",
                 last_name="Resident",
+                user = user_resident_1,
                 is_active = True
             ),
             models.Resident(
                 resident_id=UUID_2,
                 first_name="Bob",
                 last_name="Resident",
+                user = user_resident_2,
                 is_active = True
             )
         ]
@@ -131,5 +143,37 @@ def create_carepartnerresidents():
                 carepartner=carepartner_2,
                 resident=resident_2
             )
+        ]
+    )
+
+def create_devices():
+    models.Device.objects.all().delete()
+
+    resident_1 = models.Resident.objects.filter(pk=UUID_1).first()
+    resident_2 = models.Resident.objects.filter(pk=UUID_2).first()
+
+    models.Device.objects.bulk_create(
+        [
+            models.Device(
+                device_id=UUID_1,
+                name="Joi-Dev",
+                description="Joi development environment",
+                resident=resident_1,
+                is_active = True
+            ),
+            models.Device(
+                device_id=UUID_2,
+                name="Joi-Test",
+                description="Joi test environment",
+                resident=resident_1,
+                is_active = True
+            ),
+            models.Device(
+                device_id=UUID_3,
+                name="Joi-Demo",
+                description="Joi demo environment",
+                resident=resident_1,
+                is_active = True
+            ),
         ]
     )

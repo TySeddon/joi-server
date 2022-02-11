@@ -83,11 +83,18 @@ Apply outstanding migrations to the database
     python manage.py migrate   
 
 ### Custom Management Commands
-python manage.py delete_data
-python manage.py initialize_data      
+    python manage.py delete_data
+    python manage.py initialize_data      
 
 ### Redeploy code to Azure
     az webapp up
+
+### Run Management Commands on Azure    
+1. Open Azure Shell
+    az webapp ssh
+2. cd joiwebsite
+3. Run commands such as:
+    python manage.py migrate
 
 
 ## Chrome Configure
