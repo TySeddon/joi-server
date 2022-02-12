@@ -36,15 +36,20 @@ class ResidentAuthorizedViewSet(viewsets.ModelViewSet):
             # if Admin or Researcher, then show all data
             queryset = self.get_queryset()
         else:
-            # get CarePartner object for current user
-            user_carepartner = models.CarePartner.objects.filter(user=request.user).first()
-            if user_carepartner is not None:
-                # get list of Residents associated with this CarePartner
-                residents = models.CarePartnerResident.objects.filter(carepartner=user_carepartner).values_list('resident_id', flat=True)
-                # filter list to those Residents
-                queryset = self.get_queryset().filter(resident_id__in=residents)
+            # see if user is resident
+            resident = models.Resident.objects.filter(user=request.user).first()
+            if resident is not None:
+                queryset = self.get_queryset().filter(resident_id=resident.resident_id)
             else:
-                queryset = None                
+                # see if user is care partner
+                user_carepartner = models.CarePartner.objects.filter(user=request.user).first()
+                if user_carepartner is not None:
+                    # get list of Residents associated with this CarePartner
+                    residents = models.CarePartnerResident.objects.filter(carepartner=user_carepartner).values_list('resident_id', flat=True)
+                    # filter list to those Residents
+                    queryset = self.get_queryset().filter(resident_id__in=residents)
+                else:
+                    queryset = None                
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)   
 

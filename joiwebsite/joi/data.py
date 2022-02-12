@@ -12,6 +12,9 @@ UUID_3 = uuid.UUID("00000000-0000-0000-0000-000000000003")
 UUID_4 = uuid.UUID("00000000-0000-0000-0000-000000000004")
 UUID_5 = uuid.UUID("00000000-0000-0000-0000-000000000005")
 
+MUSIC_TYPE = 1
+PHOTO_TYPE = 2
+
 # def get_uuid(prefix):
 #     if prefix == "test_":
 #         return uuid.UUID("00000000-0000-0000-0000-000000000001")
@@ -21,6 +24,8 @@ UUID_5 = uuid.UUID("00000000-0000-0000-0000-000000000005")
 #         return uuid.UUID("00000000-0000-0000-0000-000000000003")
 
 def delete_data():
+    models.MemoryBox.objects.all().delete()
+    models.MemoryBoxType.objects.all().delete()
     models.Device.objects.all().delete()
     models.CarePartnerResident.objects.all().delete()
     models.CarePartner.objects.all().delete()
@@ -35,6 +40,8 @@ def initialize_data():
     create_carepartners()
     create_carepartnerresidents()
     create_devices()
+    create_memoryboxtypes()
+    create_memoryboxes()
 
 def create_groups():
     Group.objects.all().delete()
@@ -50,8 +57,8 @@ def create_users():
     User.objects.all().delete()
 
     # create admin user for testing
-    User.objects.create_user(
-        username="admin_1", email='admin_1@cognivista.com', password='testpassword', is_staff=True).save()
+    User.objects.create_superuser(
+        username="admin_1", email='admin_1@cognivista.com', password='testpassword').save()
 
     # create researcher for testing
     User.objects.create_user(
@@ -177,3 +184,49 @@ def create_devices():
             ),
         ]
     )
+
+def create_memoryboxtypes():
+    models.MemoryBoxType.objects.all().delete()
+
+    models.MemoryBoxType.objects.bulk_create(
+        [
+            models.MemoryBoxType(
+                memorybox_type_id=MUSIC_TYPE,
+                name="Music Memory Box",
+                description="Spotify playlist"
+            ),
+            models.MemoryBoxType(
+                memorybox_type_id=PHOTO_TYPE,
+                name="Photo Memory Box",
+                description="Google photo album"
+            ),
+        ]
+    )    
+def create_memoryboxes():
+    models.MemoryBox.objects.all().delete()
+
+    resident_1 = models.Resident.objects.filter(pk=UUID_1).first()
+    resident_2 = models.Resident.objects.filter(pk=UUID_2).first()
+
+    models.MemoryBox.objects.bulk_create(
+        [
+            models.MemoryBox(
+                memorybox_id=UUID_1,
+                memorybox_type_id=MUSIC_TYPE,
+                resident=resident_1,
+                name="1963 Music Memory Box",
+                description="1963 Music",
+                url="2LjLbyEEw9aRqMZo5qpK4O",
+                is_active = True
+            ),
+            models.MemoryBox(
+                memorybox_id=UUID_2,
+                memorybox_type_id=PHOTO_TYPE,
+                resident=resident_1,
+                name="Photo Memory Box",
+                description="Family and Flowers",
+                url="AF1QipP8jqh00twCDj-KhxXavsGQMqBEXqsGpFFEbNdB",
+                is_active = True
+            ),
+        ]
+    )    

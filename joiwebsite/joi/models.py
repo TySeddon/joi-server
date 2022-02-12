@@ -13,7 +13,7 @@ class Resident(models.Model):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True) # may or may not be associated with user
     first_name = models.CharField(max_length=50, null=False)
     last_name = models.CharField(max_length=50, null=False)
-    is_active = models.BooleanField(null=False), # gives admin ability to disable (not currently using this)
+    is_active = models.BooleanField(null=False) # gives admin ability to disable (not currently using this)
     knowledge_base_name = models.CharField(max_length=50, null=True)
 
 class CarePartner(models.Model):
