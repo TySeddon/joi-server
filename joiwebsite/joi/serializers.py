@@ -70,3 +70,19 @@ class SlideshowSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Slideshow
         fields = '__all__'
+
+class EndMemoryBoxSessionSerializer(serializers.Serializer):
+    model = models.MemoryBoxSession
+
+    session_end_method = serializers.CharField(required=True)  # how ended (naturally, error, or stopped by resident)
+    session_end_datetime = serializers.DateTimeField(required=True)
+    resident_self_reported_feeling = serializers.CharField(required=True)  # recorded at end of session
+
+class EndMemoryBoxSessionMediaSerializer(serializers.Serializer):
+    model = models.MemoryBoxSessionMedia
+
+    media_end_datetime = serializers.DateTimeField(required=True)
+    media_percent_completed = serializers.DecimalField(max_digits=5, decimal_places=2, required=True)
+    resident_motion = serializers.CharField(required=True)    # was resident moving and how much?
+    resident_utterances = serializers.CharField(required=True) # stuff said by resident
+    resident_self_reported_feeling = serializers.CharField(required=True)  # recorded at end of song

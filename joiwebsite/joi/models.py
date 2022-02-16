@@ -100,7 +100,7 @@ class MemoryBoxSessionMedia(models.Model):
     resident = models.ForeignKey(Resident, on_delete=models.DO_NOTHING, null=False)  # this breaks a rule of normalization.  Including it to keep it simpler for researchers to query
     media_url = models.CharField(max_length=2048, null=False)
     media_start_datetime = models.DateTimeField(null=False)
-    meida_end_datetime = models.DateTimeField(null=True)
+    media_end_datetime = models.DateTimeField(null=True)
     media_percent_completed = models.DecimalField(max_digits=5, decimal_places=2, null=True)
     media_name = models.CharField(max_length=255, null=False)
     media_artist = models.CharField(max_length=255, null=False)
@@ -109,8 +109,8 @@ class MemoryBoxSessionMedia(models.Model):
     resident_motion = models.CharField(max_length=255, null=True)    # was resident moving and how much?
     resident_utterances = models.CharField(max_length=1024, null=True) # stuff said by resident
     resident_self_reported_feeling = models.CharField(max_length=50, null=True)  # recorded at end of song
-    carepartner_flag = models.BooleanField(null=False)  # care partner can flag this for follow-up
-    researcher_flag = models.BooleanField(null=False) # researcher can flag this for follow-up
+    carepartner_flag = models.BooleanField(null=False, default=False)  # care partner can flag this for follow-up
+    researcher_flag = models.BooleanField(null=False, default=False) # researcher can flag this for follow-up
     researcher_notes = models.CharField(max_length=1024, null=True)
 
 class MediaInteraction(models.Model):
@@ -127,8 +127,8 @@ class MediaInteraction(models.Model):
     media_percent_completed = models.DecimalField(max_digits=5, decimal_places=2, null=False)
     event = models.CharField(max_length=50, null=False)  # stopped, motion, utterance, facial expression
     data = models.CharField(max_length=2048, null=True)  # movement data, utterance text, or facial expression data (JSON?)
-    carepartner_flag = models.BooleanField(null=False)  # care partner can flag this for follow-up
-    researcher_flag = models.BooleanField(null=False) # researcher can flag this for follow-up
+    carepartner_flag = models.BooleanField(null=False, default=False)  # care partner can flag this for follow-up
+    researcher_flag = models.BooleanField(null=False, default=False) # researcher can flag this for follow-up
     researcher_notes = models.CharField(max_length=1024, null=True)
 
 class Slideshow(models.Model):

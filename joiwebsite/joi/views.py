@@ -4,6 +4,7 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import Permission, User, Group
 from rest_framework import exceptions, viewsets, permissions, status, generics
 from rest_framework.response import Response
+from rest_framework.decorators import action
 import joi.models as models
 import joi.serializers as serializers
 from joi.permissions import IsOwnerOrAdmin, IsAdminOrReadOnly, IsCarePartnerOfResident, is_member
@@ -136,13 +137,68 @@ class MemoryBoxSessionViewSet(ResidentAuthorizedViewSet):
     Residents can only view and edit their MemoryBoxSessions
     """
     queryset = models.MemoryBoxSession.objects.all()
-    serializer_class = serializers.MemoryBoxSessionSerializer      
+    serializer_class = serializers.MemoryBoxSessionSerializer    
+
+
+    serializer_action_classes = {
+        'end': serializers.EndMemoryBoxSessionSerializer,
+    }    
+
+    def get_serializer_class(self):
+        try:
+            print(self.action)
+            return self.serializer_action_classes[self.action]
+        except (KeyError, AttributeError):
+            return super(MemoryBoxSessionViewSet, self).get_serializer_class()    
+
+    @action(detail=True, methods=['post'])
+    def end(self, request, pk=None, version=None):
+        obj = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():           
+            obj.session_end_method = serializer.data.get("session_end_method")
+            obj.session_end_datetime = serializer.data.get("session_end_datetime")
+            obj.resident_self_reported_feeling = serializer.data.get("resident_self_reported_feeling")
+            obj.save()
+            return Response({'detail': 'record updated'}, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class MemoryBoxSessionMediaViewSet(ResidentAuthorizedViewSet):
     """
     """
     queryset = models.MemoryBoxSessionMedia.objects.all()
-    serializer_class = serializers.MemoryBoxSessionMediaSerializer          
+    serializer_class = serializers.MemoryBoxSessionMediaSerializer  
+
+    serializer_action_classes = {
+        'end': serializers.EndMemoryBoxSessionMediaSerializer,
+    }    
+
+    def get_serializer_class(self):
+        try:
+            print(self.action)
+            return self.serializer_action_classes[self.action]
+        except (KeyError, AttributeError):
+            return super(MemoryBoxSessionMediaViewSet, self).get_serializer_class()    
+
+    @action(detail=True, methods=['post'])
+    def end(self, request, pk=None, version=None):
+        obj = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():           
+            obj.media_end_datetime = serializer.data.get("media_end_datetime")
+            obj.media_percent_completed = serializer.data.get("media_percent_completed")
+            obj.resident_motion = serializer.data.get("resident_motion")
+            obj.resident_utterances = serializer.data.get("resident_utterances")
+            obj.resident_self_reported_feeling = serializer.data.get("resident_self_reported_feeling")
+            obj.save()
+            return Response({'detail': 'record updated'}, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class MediaInteractionViewSet(ResidentAuthorizedViewSet):
     """
