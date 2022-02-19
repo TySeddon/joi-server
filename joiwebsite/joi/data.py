@@ -93,14 +93,16 @@ def create_residents():
                 first_name="Ruth",
                 last_name="Resident",
                 user = user_resident_1,
-                is_active = True
+                is_active = True,
+                knowledge_base_name = "joi-ruth"
             ),
             models.Resident(
                 resident_id=UUID_2,
                 first_name="Bob",
                 last_name="Resident",
                 user = user_resident_2,
-                is_active = True
+                is_active = True,
+                knowledge_base_name = "joi-bob"
             )
         ]
     )
@@ -225,7 +227,7 @@ def create_memoryboxes():
                 resident=resident_1,
                 name="Photo Memory Box",
                 description="Family and Flowers",
-                url="AF1QipP8jqh00twCDj-KhxXavsGQMqBEXqsGpFFEbNdB",
+                url="ABsI1v6-zPvpuVn4RREb_3zlxSm2Q3sfQKI5Uhk2jImQZ7HdtXk9SZd5vKEAyML9sARGPuHaf8_i",
                 is_active = True
             ),
         ]
