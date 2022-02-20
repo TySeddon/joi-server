@@ -117,3 +117,16 @@ Chromse does not allow videos to automatically play (autoplay).  This can be ove
 This upgrades browser on Raspberry Pi so that it can play Spotify
     sudo apt update
     sudo apt install libwidevinecdm0
+
+
+# Reports
+
+## Example of extracting JSON fields
+    select 
+        memorybox_session_media_id, 
+        resident_motion, 
+        json_extract_path(resident_motion::json,'percent') as percent,
+        json_extract_path(resident_motion::json,'num_of_seconds') as num_of_seconds
+    from joi_memoryboxsessionmedia
+    where resident_motion is not null
+    order by media_end_datetime desc;

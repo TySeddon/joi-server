@@ -124,6 +124,7 @@ class MediaInteraction(models.Model):
     memorybox_session_media = models.ForeignKey(MemoryBoxSessionMedia, on_delete=models.DO_NOTHING, null=False)
     resident = models.ForeignKey(Resident, on_delete=models.DO_NOTHING, null=False)  # this breaks a rule of normalization.  Including it to keep it simpler for researchers to query
     log_datetime = models.DateTimeField(null=False)
+    elapsed_seconds = models.IntegerField(null=False, default=0)
     media_percent_completed = models.DecimalField(max_digits=5, decimal_places=2, null=False)
     event = models.CharField(max_length=50, null=False)  # stopped, motion, utterance, facial expression
     data = models.CharField(max_length=2048, null=True)  # movement data, utterance text, or facial expression data (JSON?)
