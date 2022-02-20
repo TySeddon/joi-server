@@ -105,7 +105,8 @@ class MemoryBoxSessionMedia(models.Model):
     media_name = models.CharField(max_length=255, null=False)
     media_artist = models.CharField(max_length=255, null=False)
     media_tags = models.CharField(max_length=255, null=True) # comma delimited list?
-    media_classification = models.CharField(max_length=255, null=True)    # what did Spotify say about this song
+    media_classification = models.CharField(max_length=255, null=True)    
+    media_analysis = models.JSONField(max_length=2048, null=True) # what did Spotify say about this song
     resident_motion = models.JSONField(max_length=2048, null=True)    # was resident moving and how much?
     resident_utterances = models.CharField(max_length=1024, null=True) # stuff said by resident
     resident_self_reported_feeling = models.CharField(max_length=50, null=True)  # recorded at end of song
