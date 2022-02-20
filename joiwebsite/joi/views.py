@@ -21,6 +21,21 @@ def slideshow(request):
     context = {}
     return render(request, 'joi/slideshow.html', context)        
 
+def memorybox_sessions_list(request):
+    memorybox_sessions = models.MemoryBoxSession.objects.all()
+    context = {
+        'memorybox_sessions':memorybox_sessions
+    }
+    return render(request, 'joi/reports/memorybox_sessions_list.html', context)        
+
+def memorybox_session_report(request):
+    memorybox_session_id = request.GET.get('id', '735d7a1c-fb8c-4831-ba6c-67c6c0eb4c7d')
+    memorybox_session = models.MemoryBoxSession.objects.filter(memorybox_session_id=memorybox_session_id).first()
+    context = {
+        'memorybox_session':memorybox_session
+    }
+    return render(request, 'joi/reports/memorybox_session_report.html', context)        
+
 class ResidentAuthorizedViewSet(viewsets.ModelViewSet):
     """
     Base class for objects that are associated with a Resident

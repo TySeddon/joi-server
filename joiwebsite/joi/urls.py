@@ -26,6 +26,8 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('spotify', views.spotify, name='spotify'),
     path('slideshow', views.slideshow, name='slideshow'),
+    path('reports/memorybox_sessions', views.memorybox_sessions_list, name='memorybox_sessions_list'),
+    path('reports/memorybox_session', views.memorybox_session_report, name='memorybox_session_report'),
     re_path(r'^(?P<version>v1)/users/login/$', authtokenviews.obtain_auth_token),
     re_path(r'^(?P<version>v1)/', include(ROUTER.urls)),  
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

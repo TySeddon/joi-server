@@ -1,0 +1,95 @@
+{% extends "joi/base.html" %}
+
+{% block content %}
+
+<h1>Memory Box Session Report</h1>
+<div>Session: {{ memorybox_session.session_start_datetime|date:'m-d-Y h:i a e' }}</div>
+<div>Resident: {{ memorybox_session.resident.first_name }}</div>
+<div>Type: {{ memorybox_session.memorybox.memorybox_type.name }}</div>
+<div>
+    <h2>{{ memorybox_session.memorybox.name }}</h2>
+    <div class="indented">
+        <!-- <div>{{ memorybox_session.memorybox_session_id }}</div> -->
+        <div>Device: {{ memorybox_session.device.name }}</div>
+        <div>Started: {{ memorybox_session.session_start_datetime|date:'m-d-Y h:i a e' }} by {{ memorybox_session.session_start_method }}</div>
+        <div>Ended: {{ memorybox_session.session_end_datetime|date:'m-d-Y h:i a e' }} by {{ memorybox_session.session_end_method }}</div>
+    </div>
+    <div>
+        <h3>Summary</h3>
+        <div class="indented">
+            {% if memorybox_session.memorybox.memorybox_type_id == 1 %}
+                <div>{{memorybox_session.memoryboxsessionmedia_set.all.count}} Songs Played</div>
+            {% else %}    
+                <div>{{memorybox_session.memoryboxsessionmedia_set.all.count}} Photos Shown</div>
+            {% endif %}    
+            <ul style="margin-top:0px;">
+            {% for media in memorybox_session.memoryboxsessionmedia_set.all %}
+                <li>{{media.media_name}}</li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<h3>Details</h3>
+{% for media in memorybox_session.memoryboxsessionmedia_set.all %}
+    <div>
+        <!-- <div>{{ media.memorybox_session_media_id }}</div> -->
+        {% if memorybox_session.memorybox.memorybox_type_id == 1 %}
+            <h4>Song: {{ media.media_name }}</h4>
+            <div class="indented">
+                <div>Artist: {{ media.media_artist }}</div>
+                <div>Tags: {{ media.media_tags }}</div>
+                <div>Classification: {{ media.media_classification }}</div>
+                <div>Features: {{ media.media_features }}</div>
+
+                <div>Start: {{ media.media_start_datetime|date:'m-d-Y h:i a e' }}</div>
+                <div>End: {{ media.media_end_datetime|date:'m-d-Y h:i a e' }}</div>
+                <div>Motion: {{ media.resident_motion }}</div>
+            </div>
+        {% elif memorybox_session.memorybox.memorybox_type_id == 2 %}
+            <h4>Photo: {{ media.media_name }}</h4>
+            <div class="indented">
+                <div>Artist: {{ media.media_artist }}</div>
+                <div>Tags: {{ media.media_tags }}</div>
+                <div>Classification: {{ media.media_classification }}</div>
+                <div>Start: {{ media.media_start_datetime|date:'m-d-Y h:i a e' }}</div>
+                <div>End: {{ media.media_end_datetime|date:'m-d-Y h:i a e' }}</div>
+            </div>
+        {% endif %}
+    </div>
+
+    {% if memorybox_session.memorybox.memorybox_type_id == 1 %}
+    <h5>Motion</h5>
+    <div>Chart goes here</div>
+    {% endif %}
+
+    <h5>Interactions</h5>
+    <table>
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>Elapsed<br/>Seconds</th>
+                <th>Percent<br/>Complete</th>
+                <th>Event</th>
+                <th>Data</th>
+            </tr>
+        </thead>
+    {% for interaction in media.mediainteraction_set.all %}
+        <tr>
+            <!-- <td>{{ interaction.media_interaction_id }}</td> -->
+            <td>{{ interaction.log_datetime|date:'h:i:s a e' }}</td>
+            <td style="text-align: right;">{{ interaction.elapsed_seconds }}</td>
+            <td style="text-align: right;">{{ interaction.media_percent_completed }}</td>
+            <td>{{ interaction.event }}</td>
+            <td>{{ interaction.data }}</td>
+        </tr>
+    {% empty %}
+        <div>No interactions</div>
+    {% endfor %}
+    </table>
+{% empty %}
+    <div>No media was experienced</div>
+{% endfor %}
+
+{% endblock %}

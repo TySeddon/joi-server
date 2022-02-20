@@ -1,6 +1,22 @@
 <html>
     <head>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        <style>
+            body {font-family: sans-serif;}
+            h1 {font-size: 1.8em;margin-bottom: 3px;}
+            h2 {font-size: 1.6em;margin-bottom: 3px;}
+            h3 {font-size: 1.4em;margin-bottom: 3px;}
+            h4 {font-size: 1.2em;margin-bottom: 3px;}
+            h5 {font-size: 1.1em;}
+            table {border-collapse: collapse;}
+            th,td {text-align:left;padding:10px;}
+            td {border-style: solid; border-color: #2c2c2c;}
+            tr:nth-child(even) {background-color: #cccccc;}
+            thead tr {vertical-align: bottom; text-align: left;}
+            .indented {margin-left:20px;}
+        </style>
+        
     </head>
     <body>
         {% block content %}{% endblock %}

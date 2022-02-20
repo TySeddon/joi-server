@@ -77,6 +77,8 @@ class MemoryBoxSession(models.Model):
     Represents a Resident's session with a memory box
     A session has a specific start and end 
     """
+    class Meta:
+        ordering = ['-session_start_datetime']    
     memorybox_session_id = models.UUIDField(primary_key=True)
     memorybox = models.ForeignKey(MemoryBox, on_delete=models.DO_NOTHING, null=False)
     resident = models.ForeignKey(Resident, on_delete=models.DO_NOTHING, null=False)  # this breaks a rule of normalization.  Including it to keep it simpler for researchers to query
@@ -95,6 +97,8 @@ class MemoryBoxSessionMedia(models.Model):
     Represents the playing of a media item (song, photo, video, etc) 
     within the context of a MemmoryBoxSession
     """
+    class Meta:
+        ordering = ['media_start_datetime']    
     memorybox_session_media_id = models.UUIDField(primary_key=True)
     memorybox_session = models.ForeignKey(MemoryBoxSession, on_delete=models.DO_NOTHING, null=False)
     resident = models.ForeignKey(Resident, on_delete=models.DO_NOTHING, null=False)  # this breaks a rule of normalization.  Including it to keep it simpler for researchers to query
@@ -121,6 +125,8 @@ class MediaInteraction(models.Model):
     While media is playing, Joi will periodically collect data such as:
         was the Resident moving, did they request it to stop, did they saying something, did they make facial expressions
     """
+    class Meta:
+        ordering = ['log_datetime']    
     media_interaction_id = models.UUIDField(primary_key=True)
     memorybox_session_media = models.ForeignKey(MemoryBoxSessionMedia, on_delete=models.DO_NOTHING, null=False)
     resident = models.ForeignKey(Resident, on_delete=models.DO_NOTHING, null=False)  # this breaks a rule of normalization.  Including it to keep it simpler for researchers to query

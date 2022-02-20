@@ -124,9 +124,17 @@ This upgrades browser on Raspberry Pi so that it can play Spotify
 ## Example of extracting JSON fields
     select 
         memorybox_session_media_id, 
+        media_name, 
+        media_artist,
         resident_motion, 
-        json_extract_path(resident_motion::json,'percent') as percent,
-        json_extract_path(resident_motion::json,'num_of_seconds') as num_of_seconds
+        json_extract_path(resident_motion::json,'percent') as motion_percent,
+        json_extract_path(resident_motion::json,'num_of_seconds') as total_seconds_monitored,
+        media_features,
+        json_extract_path(media_features::json,'tempo') as tempo,
+        json_extract_path(media_features::json,'danceability') as danceability,
+        json_extract_path(media_features::json,'valence') as valence,
+        json_extract_path(media_features::json,'energy') as energy
     from joi_memoryboxsessionmedia
     where resident_motion is not null
     order by media_end_datetime desc;
+

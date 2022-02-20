@@ -1,0 +1,29 @@
+{% extends "joi/base.html" %}
+
+{% block content %}
+
+<h1>Sessions List</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Resident</th>
+            <th>Memory Box</th>
+            <th style="width: 120px;">Date/Time</th>
+            <th style="width: 80px;">Songs or Photos</th>
+        </tr>
+    </thead>
+{% for session in memorybox_sessions %}
+    <tr>
+        <td>{{session.resident.first_name}}</td>
+        <td>
+            <div style="font-size:1.2em;"><a href='memorybox_session?id={{session.memorybox_session_id}}'>{{session.memorybox.name}}</a></div>
+            <div>{{session.memorybox.memorybox_type.name}}</div>
+        </td>
+        <td>{{session.session_start_datetime|date:'m-d-Y h:i a e'}}</td>
+        <td style="text-align: right;">{{session.memoryboxsessionmedia_set.count}}</td>
+    </tr>
+{% endfor %}
+</table>
+
+{% endblock %}
