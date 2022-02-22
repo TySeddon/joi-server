@@ -292,8 +292,8 @@ def create_memoryboxesessionmedia():
                 media_artist="Elvis",
                 media_tags="NA",
                 media_classification="NA",
-                media_features='{"id":"2EPr9Wx7e1cpGEbNAtuN7x","key":3,"uri":"spotify:track:2EPr9Wx7e1cpGEbNAtuN7x","mode":1,"type":"audio_features","tempo":160.753,"energy":0.805,"valence":0.969,"liveness":0.0938,"loudness":-7.436,"track_href":"https://api.spotify.com/v1/tracks/2EPr9Wx7e1cpGEbNAtuN7x","duration_ms":150160,"speechiness":0.0368,"acousticness":0.398,"analysis_url":"https://api.spotify.com/v1/audio-analysis/2EPr9Wx7e1cpGEbNAtuN7x","danceability":0.549,"time_signature":4,"instrumentalness":0.00000129}',
-                resident_motion='{"history":[0,0,1,1,1,1,1,1,1,1,1],"percent":0.82,"end_time":"2022-02-21T17:13:26.426282","start_time":"2022-02-21T17:13:14.775940","num_of_seconds":11,"motion_event_pairs":[["2022-02-21T17:13:14.860799","2022-02-21T17:13:15.772985"],["2022-02-21T17:13:16.399637","2022-02-21T17:13:26.426186"]],"rolling_history_5sec":[0,0,0,0,0.6,0.8,1,1,1,1,1],"rolling_history_10sec":[0,0,0,0,0,0,0,0,0,0.8,0.9]}',
+                media_features={"id":"2EPr9Wx7e1cpGEbNAtuN7x","key":3,"uri":"spotify:track:2EPr9Wx7e1cpGEbNAtuN7x","mode":1,"type":"audio_features","tempo":160.753,"energy":0.805,"valence":0.969,"liveness":0.0938,"loudness":-7.436,"track_href":"https://api.spotify.com/v1/tracks/2EPr9Wx7e1cpGEbNAtuN7x","duration_ms":150160,"speechiness":0.0368,"acousticness":0.398,"analysis_url":"https://api.spotify.com/v1/audio-analysis/2EPr9Wx7e1cpGEbNAtuN7x","danceability":0.549,"time_signature":4,"instrumentalness":0.00000129},
+                resident_motion={"history":[0,0,1,1,1,1,1,1,1,1,1],"percent":0.82,"end_time":"2022-02-21T17:13:26.426282","start_time":"2022-02-21T17:13:14.775940","num_of_seconds":11,"motion_event_pairs":[["2022-02-21T17:13:14.860799","2022-02-21T17:13:15.772985"],["2022-02-21T17:13:16.399637","2022-02-21T17:13:26.426186"]],"rolling_history_5sec":[0,0,0,0,0.6,0.8,1,1,1,1,1],"rolling_history_10sec":[0,0,0,0,0,0,0,0,0,0.8,0.9]},
             ),
             models.MemoryBoxSessionMedia(
                 memorybox_session_media_id=UUID_2,
@@ -307,8 +307,8 @@ def create_memoryboxesessionmedia():
                 media_artist="Elvis",
                 media_tags="NA",
                 media_classification="NA",
-                media_features='{"id":"41zpWL98BsYKP5nvtdTM5z","key":0,"uri":"spotify:track:41zpWL98BsYKP5nvtdTM5z","mode":1,"type":"audio_features","tempo":183.178,"energy":0.164,"valence":0.845,"liveness":0.0883,"loudness":-14.579,"track_href":"https://api.spotify.com/v1/tracks/41zpWL98BsYKP5nvtdTM5z","duration_ms":142000,"speechiness":0.0378,"acousticness":0.914,"analysis_url":"https://api.spotify.com/v1/audio-analysis/41zpWL98BsYKP5nvtdTM5z","danceability":0.413,"time_signature":4,"instrumentalness":0.000014}',
-                resident_motion='{"history":[0,0,0,0,0,0,1,1,1,1],"percent":0.4,"end_time":"2022-02-21T17:12:15.289328","start_time":"2022-02-21T17:12:04.565609","num_of_seconds":10,"motion_event_pairs":[["2022-02-21T17:12:10.197264","2022-02-21T17:12:14.782564"]],"rolling_history_5sec":[0,0,0,0,0,0,0.2,0.4,0.6,0.8],"rolling_history_10sec":[0,0,0,0,0,0,0,0,0,0.4]}',
+                media_features={"id":"41zpWL98BsYKP5nvtdTM5z","key":0,"uri":"spotify:track:41zpWL98BsYKP5nvtdTM5z","mode":1,"type":"audio_features","tempo":183.178,"energy":0.164,"valence":0.845,"liveness":0.0883,"loudness":-14.579,"track_href":"https://api.spotify.com/v1/tracks/41zpWL98BsYKP5nvtdTM5z","duration_ms":142000,"speechiness":0.0378,"acousticness":0.914,"analysis_url":"https://api.spotify.com/v1/audio-analysis/41zpWL98BsYKP5nvtdTM5z","danceability":0.413,"time_signature":4,"instrumentalness":0.000014},
+                resident_motion={"history":[0,0,0,0,0,0,1,1,1,1],"percent":0.4,"end_time":"2022-02-21T17:12:15.289328","start_time":"2022-02-21T17:12:04.565609","num_of_seconds":10,"motion_event_pairs":[["2022-02-21T17:12:10.197264","2022-02-21T17:12:14.782564"]],"rolling_history_5sec":[0,0,0,0,0,0,0.2,0.4,0.6,0.8],"rolling_history_10sec":[0,0,0,0,0,0,0,0,0,0.4]},
             ),
         ]
     )        

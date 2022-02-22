@@ -76,7 +76,7 @@
     <div>
         <div style="position: relative; width: 400px; height:200px;">
             <canvas class="motionChart" 
-                    data-motion2="[0.0, 0.0, 0.0, 0.0, 0.6, 0.8, 1.0, 1.0, 1.0, 0.8, 0.6]"
+                    data-window-size="5"
                     data-motion="{{media.rolling_history_5sec}}"></canvas> 
         </div>
     </div>
@@ -116,7 +116,9 @@
     function createMotionReport(canvas) {
         var context = canvas.getContext('2d');
         var motion_data = JSON.parse(canvas.dataset.motion);
-        time_labels = motion_data.map((o,i)=>i+1)
+        var window_size = JSON.parse(canvas.dataset.windowSize);
+        motion_data.splice(0,window_size); // remove first N items since they are NaN, because of rolling
+        time_labels = motion_data.map((o,i)=>i+1+window_size)
 
         var myChart = new Chart(context, {
                 type: 'bar',
@@ -135,7 +137,17 @@
                     scales: {
                         y: {
                             beginAtZero: true
-                        }
+                        },
+                        xAxes: [{
+                            ticks:{
+                                display: false //this will remove all the x-axis grid lines
+                            }
+                        }],
+                        yAxes: [{
+                            ticks:{
+                                display: false //this will remove all the y-axis grid lines
+                            }
+                        }]
                     }
                 }
         });

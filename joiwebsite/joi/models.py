@@ -122,7 +122,7 @@ class MemoryBoxSessionMedia(models.Model):
 
     @property
     def resident_motion_obj(self):
-        return munchify(json.loads(self.resident_motion))
+        return munchify(self.resident_motion)
 
     @property
     def rolling_history_3sec(self):
