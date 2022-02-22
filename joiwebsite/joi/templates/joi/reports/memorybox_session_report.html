@@ -1,4 +1,5 @@
 {% extends "joi/base.html" %}
+{% load custom_tags %}
 
 {% block content %}
 
@@ -39,29 +40,46 @@
             <h4>Song: {{ media.media_name }}</h4>
             <div class="indented">
                 <div>Artist: {{ media.media_artist }}</div>
-                <div>Tags: {{ media.media_tags }}</div>
-                <div>Classification: {{ media.media_classification }}</div>
-                <div>Features: {{ media.media_features }}</div>
-
                 <div>Start: {{ media.media_start_datetime|date:'m-d-Y h:i a e' }}</div>
                 <div>End: {{ media.media_end_datetime|date:'m-d-Y h:i a e' }}</div>
-                <div>Motion: {{ media.resident_motion }}</div>
+                <div>Tags: {{ media.media_tags }}</div>
+                <div>Classification: {{ media.media_classification }}</div>
+                <div>
+                    <div>Features</div>
+                    <div class="indented">
+                        <div>Tempo: {{ media.media_features|json_value:'tempo' }}</div>
+                        <div>Energy: {{ media.media_features|json_value:'energy'|percentage }}</div>
+                        <div>Valence: {{ media.media_features|json_value:'valence'|percentage }}</div>
+                        <div>Danceability: {{ media.media_features|json_value:'danceability'|percentage }}</div>
+                        <div>Liveness: {{ media.media_features|json_value:'liveness'|percentage }}</div>
+                        <div>Speechiness: {{ media.media_features|json_value:'speechiness'|percentage }}</div>
+                        <div>Acousticness: {{ media.media_features|json_value:'acousticness'|percentage }}</div>
+                        <div>Instrumentalness: {{ media.media_features|json_value:'instrumentalness'|percentage }}</div>
+                    </div>
+                </div>
             </div>
         {% elif memorybox_session.memorybox.memorybox_type_id == 2 %}
             <h4>Photo: {{ media.media_name }}</h4>
             <div class="indented">
                 <div>Artist: {{ media.media_artist }}</div>
-                <div>Tags: {{ media.media_tags }}</div>
-                <div>Classification: {{ media.media_classification }}</div>
                 <div>Start: {{ media.media_start_datetime|date:'m-d-Y h:i a e' }}</div>
                 <div>End: {{ media.media_end_datetime|date:'m-d-Y h:i a e' }}</div>
+                <div>Tags: {{ media.media_tags }}</div>
+                <div>Classification: {{ media.media_classification }}</div>
             </div>
         {% endif %}
     </div>
 
     {% if memorybox_session.memorybox.memorybox_type_id == 1 %}
-    <h5>Motion</h5>
-    <div>Chart goes here</div>
+    <h5>Resident Movement</h5>
+    <div>Moving <strong>{{ media.motion_percent|percentage }}</strong> of the time</div>
+    <div>
+        <div style="position: relative; width: 400px; height:200px;">
+            <canvas class="motionChart" 
+                    data-motion2="[0.0, 0.0, 0.0, 0.0, 0.6, 0.8, 1.0, 1.0, 1.0, 0.8, 0.6]"
+                    data-motion="{{media.rolling_history_5sec}}"></canvas> 
+        </div>
+    </div>
     {% endif %}
 
     <h5>Interactions</h5>
@@ -88,8 +106,46 @@
         <div>No interactions</div>
     {% endfor %}
     </table>
+    <hr/>
 {% empty %}
     <div>No media was experienced</div>
 {% endfor %}
+
+{%block scripts%}
+<script>
+    function createMotionReport(canvas) {
+        var context = canvas.getContext('2d');
+        var motion_data = JSON.parse(canvas.dataset.motion);
+        time_labels = motion_data.map((o,i)=>i+1)
+
+        var myChart = new Chart(context, {
+                type: 'bar',
+                data: {
+                    labels: time_labels,
+                    datasets: [{
+                        label: 'Motion',
+                        data: motion_data,
+                        backgroundColor: 'rgba(255, 99, 132, 1.0)', 
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+        });
+
+    }
+
+    documentReady(function(){
+            document.querySelectorAll(".motionChart").forEach(createMotionReport)
+    });
+</script>
+{%endblock scripts%}
 
 {% endblock %}

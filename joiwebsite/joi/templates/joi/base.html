@@ -8,7 +8,7 @@
             h2 {font-size: 1.6em;margin-bottom: 3px;}
             h3 {font-size: 1.4em;margin-bottom: 3px;}
             h4 {font-size: 1.2em;margin-bottom: 3px;}
-            h5 {font-size: 1.1em;}
+            h5 {font-size: 1.1em;margin-bottom: 3px;}
             table {border-collapse: collapse;}
             th,td {text-align:left;padding:10px;}
             td {border-style: solid; border-color: #2c2c2c;}
@@ -16,7 +16,22 @@
             thead tr {vertical-align: bottom; text-align: left;}
             .indented {margin-left:20px;}
         </style>
-        
+
+        <!--Chart js-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" integrity="sha256-Uv9BNBucvCPipKQ2NS9wYpJmi8DTOEfTA/nH2aoJALw=" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" integrity="sha256-aa0xaJgmK/X74WM224KMQeNQC2xYKwlAt08oZqjeF0E=" crossorigin="anonymous" />
+        <!-- jQuery -->
+        <script>
+            function documentReady(fn) {
+                // see if DOM is already available
+                if (document.readyState === "complete" || document.readyState === "interactive") {
+                    // call on next available tick
+                    setTimeout(fn, 1);
+                } else {
+                    document.addEventListener("DOMContentLoaded", fn);
+                }
+            }    
+        </script> 
     </head>
     <body>
         {% block content %}{% endblock %}

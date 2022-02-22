@@ -1,6 +1,8 @@
 from email.policy import default
 from django.db import models
 from django.contrib.auth.models import User
+from munch import munchify
+import json
 
 # make email address unique
 User._meta.get_field('email')._unique = True
@@ -117,6 +119,25 @@ class MemoryBoxSessionMedia(models.Model):
     carepartner_flag = models.BooleanField(null=False, default=False)  # care partner can flag this for follow-up
     researcher_flag = models.BooleanField(null=False, default=False) # researcher can flag this for follow-up
     researcher_notes = models.CharField(max_length=1024, null=True)
+
+    @property
+    def resident_motion_obj(self):
+        return munchify(json.loads(self.resident_motion))
+
+    @property
+    def rolling_history_3sec(self):
+        report = self.resident_motion_obj
+        return report.rolling_history_3sec if report else []
+
+    @property
+    def rolling_history_5sec(self):
+        report = self.resident_motion_obj
+        return report.rolling_history_5sec if report else []
+
+    @property
+    def motion_percent(self):
+        report = self.resident_motion_obj
+        return report.percent if report else []
 
 class MediaInteraction(models.Model):
     """
