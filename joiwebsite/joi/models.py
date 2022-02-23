@@ -94,6 +94,25 @@ class MemoryBoxSession(models.Model):
     researcher_flag = models.BooleanField(null=False, default=False) # researcher can flag this for follow-up
     researcher_notes = models.CharField(max_length=1024, null=True)
 
+    @property
+    def energy_over_time(self):
+        try:
+            return list(map(lambda o: o.media_features_obj.energy, self.memoryboxsessionmedia_set.all()))
+        except:
+            return []            
+
+    @property
+    def media_names(self):
+        try:
+            return list(map(lambda o: o.media_name.replace("'", ""), self.memoryboxsessionmedia_set.all()))
+        except:
+            return []     
+
+    @property 
+    def media_names_json(self):
+        return json.dumps(self.media_names)
+
+
 class MemoryBoxSessionMedia(models.Model):
     """
     Represents the playing of a media item (song, photo, video, etc) 
@@ -123,6 +142,10 @@ class MemoryBoxSessionMedia(models.Model):
     @property
     def resident_motion_obj(self):
         return munchify(self.resident_motion)
+
+    @property
+    def media_features_obj(self):
+        return munchify(self.media_features)
 
     @property
     def rolling_history_3sec(self):
@@ -156,6 +179,7 @@ class MediaInteraction(models.Model):
     media_percent_completed = models.DecimalField(max_digits=5, decimal_places=2, null=False)
     event = models.CharField(max_length=50, null=False)  # stopped, motion, utterance, facial expression
     data = models.CharField(max_length=2048, null=True)  # movement data, utterance text, or facial expression data (JSON?)
+    analysis = models.JSONField(max_length=2048, null=True)   # e.g. sentiment analysis
     carepartner_flag = models.BooleanField(null=False, default=False)  # care partner can flag this for follow-up
     researcher_flag = models.BooleanField(null=False, default=False) # researcher can flag this for follow-up
     researcher_notes = models.CharField(max_length=1024, null=True)
