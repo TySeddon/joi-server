@@ -13,6 +13,10 @@ def index(request):
     context = {}
     return render(request, 'joi/home.html', context)    
 
+def joi_home(request):
+    context = {}
+    return render(request, 'joi/joi_home.html', context)    
+
 def spotify(request):
     context = {}
     return render(request, 'joi/spotify.html', context)        

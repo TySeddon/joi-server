@@ -24,6 +24,7 @@ ROUTER.register(r'slideshows', views.SlideshowViewSet)
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('joi_home', views.joi_home, name='joi_home'),
     path('spotify', views.spotify, name='spotify'),
     path('slideshow', views.slideshow, name='slideshow'),
     path('reports/memorybox_sessions', views.memorybox_sessions_list, name='memorybox_sessions_list'),
