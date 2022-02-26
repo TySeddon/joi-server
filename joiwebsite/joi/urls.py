@@ -21,6 +21,7 @@ ROUTER.register(r'memoryboxsessions', views.MemoryBoxSessionViewSet)
 ROUTER.register(r'memoryboxsessionmedia', views.MemoryBoxSessionMediaViewSet)
 ROUTER.register(r'mediainteractions', views.MediaInteractionViewSet)
 ROUTER.register(r'slideshows', views.SlideshowViewSet)
+ROUTER.register(r'devicemessages', views.DeviceMessageViewSet)
 
 urlpatterns = [
     path('', views.index, name='index'),

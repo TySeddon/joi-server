@@ -5,8 +5,8 @@ register = template.Library()
 
 @register.filter
 def percentage(value):
-    if value:
-        return f"{int(value * 100)}%"
+    if not (value is None):
+        return f"{int(float(value) * 100)}%"
     else:
         return "Error"        
 

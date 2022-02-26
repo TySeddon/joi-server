@@ -97,6 +97,7 @@
                 <th style="text-align: right;">Percent<br/>Complete</th>
                 <th>Event</th>
                 <th>Data</th>
+                <th>Analysis</th>
             </tr>
         </thead>
     {% for interaction in media.mediainteraction_set.all %}
@@ -107,6 +108,13 @@
             <td style="text-align: right;">{{ interaction.media_percent_completed }}</td>
             <td>{{ interaction.event }}</td>
             <td>{{ interaction.data }}</td>
+            <td>
+                {% if interaction.analysis != None %}
+                <div><span class="sublabel">Positive:</span> {{ interaction.analysis|json_value:'positive'|percentage}}</div>
+                <div><span class="sublabel">Neutral:</span> {{ interaction.analysis|json_value:'neutral'|percentage}}</div>
+                <div><span class="sublabel">Negative:</span> {{ interaction.analysis|json_value:'negative'|percentage}}</div>
+                {%endif%}
+            </td>
         </tr>
     {% empty %}
         <div>No interactions</div>

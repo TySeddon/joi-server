@@ -18,6 +18,9 @@ class Resident(models.Model):
     is_active = models.BooleanField(null=False) # gives admin ability to disable (not currently using this)
     knowledge_base_name = models.CharField(max_length=50, null=True)
 
+    def __str__(self):
+        return self.first_name
+
 class CarePartner(models.Model):
     """
     Represents a Care Partner
@@ -27,6 +30,9 @@ class CarePartner(models.Model):
     first_name = models.CharField(max_length=50, null=False)
     last_name = models.CharField(max_length=50, null=False)
     is_active = models.BooleanField(null=False) # gives admin ability to disable (not currently using this)
+
+    def __str__(self):
+        return self.first_name
 
 class CarePartnerResident(models.Model):
     """
@@ -48,6 +54,9 @@ class Device(models.Model):
     resident = models.ForeignKey(Resident, on_delete=models.DO_NOTHING, null=False) # the resident currently associated with this device
     is_active = models.BooleanField(null=False) # gives admin ability to disable  (not currently using this)
 
+    def __str__(self):
+        return self.name
+
 class MemoryBoxType(models.Model):
     """
     Represents a type of memory box (music, photo, etc)
@@ -55,6 +64,9 @@ class MemoryBoxType(models.Model):
     memorybox_type_id = models.SmallIntegerField(primary_key=True)
     name = models.CharField(max_length=50, null=False) 
     description = models.CharField(max_length=255, null=True) 
+
+    def __str__(self):
+        return self.name
 
 class MemoryBox(models.Model):
     """
@@ -184,6 +196,10 @@ class MediaInteraction(models.Model):
     researcher_flag = models.BooleanField(null=False, default=False) # researcher can flag this for follow-up
     researcher_notes = models.CharField(max_length=1024, null=True)
 
+    @property
+    def analysis_obj(self):
+        return munchify(self.analysis)
+
 class Slideshow(models.Model):
     """Table to facilitate communication between Joi device (Raspberry Pi) and Slideshow (web page server from Joi Server)"""
     slideshow_id = models.UUIDField(primary_key=True)
@@ -191,4 +207,16 @@ class Slideshow(models.Model):
     media_url = models.CharField(max_length=2048, null=False) # google photo mediaItem.baseUrl
     tick_count = models.IntegerField(null=False)
     ping_datetime = models.DateTimeField(null=False)
+
+class DeviceMessage(models.Model):
+    """
+    Facilitates sending message from server to Joi device
+    Joi-Skill-MainMenu polls this table looking for new messages
+    When it gets the new message it deletes it
+    """
+    device_message_id = models.UUIDField(primary_key=True)
+    device = models.ForeignKey(Device, on_delete=models.DO_NOTHING, null=False)
+    resident = models.ForeignKey(Resident, on_delete=models.DO_NOTHING, null=False)  # this breaks a rule of normalization.  Including it to keep it simpler for researchers to query
+    message_datetime = models.DateTimeField(null=False)
+    message = models.JSONField(max_length=2048, null=False)
 

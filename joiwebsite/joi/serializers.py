@@ -86,3 +86,8 @@ class EndMemoryBoxSessionMediaSerializer(serializers.Serializer):
     resident_motion = serializers.JSONField(required=False, allow_null=True)    # was resident moving and how much?
     resident_utterances = serializers.CharField(required=False) # stuff said by resident
     resident_self_reported_feeling = serializers.CharField(required=False)  # recorded at end of song
+
+class DeviceMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.DeviceMessage
+        fields = '__all__'

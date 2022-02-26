@@ -52,14 +52,22 @@ class ResidentAuthorizedViewSet(viewsets.ModelViewSet):
         if not bool(request.user and request.user.is_authenticated):
             raise exceptions.NotAuthenticated()
         queryset = None
+
+        device_id = self.request.query_params.get('device')        
         if request.user.is_staff or is_member(request.user,'Researcher'):          
             # if Admin or Researcher, then show all data
-            queryset = self.get_queryset()
+            if device_id:
+                queryset = self.get_queryset().filter(device_id=device_id)
+            else:
+                queryset = self.get_queryset()
         else:
             # see if user is resident
             resident = models.Resident.objects.filter(user=request.user).first()
             if resident is not None:
-                queryset = self.get_queryset().filter(resident_id=resident.resident_id)
+                if device_id:
+                    queryset = self.get_queryset().filter(resident_id=resident.resident_id, device_id=device_id)
+                else:                    
+                    queryset = self.get_queryset().filter(resident_id=resident.resident_id)
             else:
                 # see if user is care partner
                 user_carepartner = models.CarePartner.objects.filter(user=request.user).first()
@@ -67,7 +75,10 @@ class ResidentAuthorizedViewSet(viewsets.ModelViewSet):
                     # get list of Residents associated with this CarePartner
                     residents = models.CarePartnerResident.objects.filter(carepartner=user_carepartner).values_list('resident_id', flat=True)
                     # filter list to those Residents
-                    queryset = self.get_queryset().filter(resident_id__in=residents)
+                    if device_id:
+                        queryset = self.get_queryset().filter(resident_id__in=residents, device_id=device_id)
+                    else:                        
+                        queryset = self.get_queryset().filter(resident_id__in=residents)
                 else:
                     queryset = None                
         serializer = self.get_serializer(queryset, many=True)
@@ -218,12 +229,17 @@ class MemoryBoxSessionMediaViewSet(ResidentAuthorizedViewSet):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
 class MediaInteractionViewSet(ResidentAuthorizedViewSet):
     """
     """
     queryset = models.MediaInteraction.objects.all()
     serializer_class = serializers.MediaInteractionSerializer              
+
+class DeviceMessageViewSet(ResidentAuthorizedViewSet):
+    """
+    """
+    queryset = models.DeviceMessage.objects.all()
+    serializer_class = serializers.DeviceMessageSerializer              
 
 class SlideshowViewSet(viewsets.ModelViewSet):
     """
