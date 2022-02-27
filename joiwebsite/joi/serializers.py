@@ -91,3 +91,7 @@ class DeviceMessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.DeviceMessage
         fields = '__all__'
+
+class DeviceMessageMeSerializer(serializers.Serializer):
+    device = serializers.UUIDField(required=True)
+    message = serializers.JSONField(required=True)

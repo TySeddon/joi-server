@@ -8,13 +8,40 @@
     <div>
         <h1 style="font-size: 10em;text-align: center;">Hey Joi</h1>
         <div style="text-align: center;margin-top: 2em;">
-            <button style="font-size: 4em;">Start Photos</button>
-            <button style="font-size: 4em; margin-left: 1em;">Start Music</button>
+            <button style="font-size: 4em;"
+                    onclick="add_devicemessage('play_photos')">Start Photos</button>
+            <button style="font-size: 4em; margin-left: 1em;"
+                    onclick="add_devicemessage('play_music')">Start Music</button>
         </div>
         <div style="text-align: center;margin-top: 60px;">
             <img src="https://usisurvey.az1.qualtrics.com/CP/Graphic.php?IM=IM_0SQxiPrxNmoaA1o"/>
             <img src="https://usisurvey.az1.qualtrics.com/CP/Graphic.php?IM=IM_3h1pxigrkctpqDQ"/>
         </div>
     </div>
+
+    <script>
+        const params = new Proxy(new URLSearchParams(window.location.search), {
+            get: (searchParams, prop) => searchParams.get(prop),
+        });
+
+        function add_devicemessage(action) {
+            fetch("/joi/v1/devicemessages/me/", {
+                method: "POST",
+                headers: {
+                    'Authorization': "Token " + params.token,
+                    'Content-Type': 'application/json'
+                    }, 
+                body: JSON.stringify(
+                            {   
+                                "device":params.device,
+                                "message":{"action":action}
+                            })
+                }).then(res => {
+                    console.log("Request complete! response:", res);
+                }
+            );
+        }
+
+    </script>
 
 {% endblock %}

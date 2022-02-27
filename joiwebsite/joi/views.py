@@ -1,4 +1,7 @@
 import logging
+import uuid
+import pytz
+from datetime import datetime
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import Permission, User, Group
@@ -239,7 +242,39 @@ class DeviceMessageViewSet(ResidentAuthorizedViewSet):
     """
     """
     queryset = models.DeviceMessage.objects.all()
-    serializer_class = serializers.DeviceMessageSerializer              
+    serializer_class = serializers.DeviceMessageSerializer    
+
+    serializer_action_classes = {
+        'me': serializers.DeviceMessageMeSerializer,
+    }    
+
+    def get_serializer_class(self):
+        try:
+            print(self.action)
+            return self.serializer_action_classes[self.action]
+        except (KeyError, AttributeError):
+            return super(DeviceMessageViewSet, self).get_serializer_class()    
+
+    @action(detail=False, methods=['post'])
+    def me(self, request, pk=None, version=None):
+        serializer = self.get_serializer(data=request.data)
+
+        resident = models.Resident.objects.filter(user=request.user).first()
+
+        if serializer.is_valid():        
+            device = models.Device.objects.filter(device_id=serializer.data.get("device")).first()
+
+            obj = models.DeviceMessage()   
+            obj.device_message_id = uuid.uuid4()
+            obj.device = device
+            obj.resident = resident
+            obj.message_datetime = datetime.utcnow().replace(tzinfo=pytz.utc)
+            obj.message = serializer.data.get("message")
+
+            obj.save()
+            return Response({'detail': 'record created'}, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)              
 
 class SlideshowViewSet(viewsets.ModelViewSet):
     """
