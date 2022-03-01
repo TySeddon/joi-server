@@ -1,12 +1,17 @@
 {% extends "joi/base.html" %}
 
 {% block content %}
+
+<style>
+    a {font-size: larger;}
+</style>
+
 <div>
     <h1>Joi Administrative Website</h1>
     <ul>
-        <li><a href="/admin">Admin System</a></li>
-        <li><a href="/joi/v1/">API</a></li>
-        <li><a href="/joi/reports/memorybox_sessions">Memory Box Sessions</a></li>
+        <li><a href="/admin">Admin Functions</a> - users, devices, memoryboxes, etc.</li>
+        <li><a href="/joi/v1/">REST API</a> - explore the REST API available to Joi Devices</li>
+        <li><a href="/joi/reports/memorybox_sessions">Reports</a> - Memory Box Sessions and Interactions</li>
     </ul>
 </div>
 {% endblock %}
