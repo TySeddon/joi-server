@@ -51,13 +51,25 @@ These are tasks that were run when the project was setup.  These are being docum
 ## Azure One-Time Setup
 Setup Django and Postgres on Azure - https://docs.microsoft.com/en-us/azure/app-service/tutorial-python-postgresql-app?tabs=bash%2Cclone&pivots=postgres-single-server
 
-* az login
-* az extension add --name db-up
-* az postgres up --resource-group joi --location eastus --sku-name B_Gen5_1 --server-name cognivista-joi --database-name joi-test --admin-user <admin-username> --admin-password <admin-password> --ssl-enforcement Enabled
-* az webapp up --resource-group joi --location eastus --plan joi-test-plan --sku B1 --name joi-test-site
-* az webapp config appsettings set --settings DBHOST="cognivista-joi" DBUSER="<admin-username>" DBPASS="EryFe3hB2C_Q" DBNAME="<admin-password>"
-* az webapp ssh
+The following instructions depend on the Azure CLI.  https://docs.microsoft.com/en-us/cli/azure/install-azure-cli
 
+    1. az login
+    2. az extension add --name db-up
+    3. az postgres up --resource-group joi --location eastus --sku-name B_Gen5_1 --server-name joi-dbserver --database-name joi-db --admin-user <admin-username> --admin-password <admin-password> --ssl-enforcement Enabled
+    4. az webapp up --resource-group joi --location eastus --plan joi-plan --sku P1V2 --name joi-site
+    5. az webapp config appsettings set --settings DBHOST="joi-dbserver" DBUSER="<admin-username>" DBPASS="<admin-password>" DBNAME="joi-db"
+
+Here is a line by line description:
+
+1. Login to Azure with permissions to create and manage resources
+2. Add an extension to Azure CLI to gain capability to create databases
+3. Create a Postgres database in "joi-db" resource group in region "eastus".  Set the database admin username and password
+4. Create a App Service website in the "joi-db" resource group in region "eastus"
+5. Configure the App Settings from web site to contain database connection information
+
+NOTE: Any of the above names (databases, resource groups, regions, etc) can be changed.  Just make the appropriate changes in the settings.py and production.py.
+
+You now have a resource group, a database server, a database, and a website.  Code can be deployed from Visual Studio Code via the "az webapp up" command documented later in this document.
 
 ### Custom Startup Command
 Because the Django project is not organized the way Azure wants, set the Startup Command of the web app.  This is located in Configuration, General settings on the Azure Portal.
@@ -101,7 +113,7 @@ Apply outstanding migrations to the database
 These instructions are for the Spotify Web Playback
 
 ### Allow Sound to Auto Play
-Chromse does not allow videos to automatically play (autoplay).  This can be overridden in settings.
+Chrome does not allow videos to automatically play (autoplay).  This can be overridden in settings.
 1. Open chrome
 2. In URL type "chrome://settings/content/sound"
 3. Under "Customized behaviors", "Allowed to play sound", click "Add" button

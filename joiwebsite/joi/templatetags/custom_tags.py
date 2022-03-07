@@ -5,10 +5,12 @@ register = template.Library()
 
 @register.filter
 def percentage(value):
-    if not (value is None):
-        return f"{int(float(value) * 100)}%"
-    else:
-        return "Error"        
+    if value is not None:
+        try:
+            return f"{int(float(value) * 100)}%"
+        except:
+            pass            
+    return "Error"        
 
 @register.filter
 def json_value(value, attr):
