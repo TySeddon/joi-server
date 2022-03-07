@@ -53,11 +53,11 @@ Setup Django and Postgres on Azure - https://docs.microsoft.com/en-us/azure/app-
 
 The following instructions depend on the Azure CLI.  https://docs.microsoft.com/en-us/cli/azure/install-azure-cli
 
-    1. az login
-    2. az extension add --name db-up
-    3. az postgres up --resource-group joi --location eastus --sku-name B_Gen5_1 --server-name joi-dbserver --database-name joi-db --admin-user <admin-username> --admin-password <admin-password> --ssl-enforcement Enabled
-    4. az webapp up --resource-group joi --location eastus --plan joi-plan --sku P1V2 --name joi-site
-    5. az webapp config appsettings set --settings DBHOST="joi-dbserver" DBUSER="<admin-username>" DBPASS="<admin-password>" DBNAME="joi-db"
+1. az login
+2. az extension add --name db-up
+3. az postgres up --resource-group joi --location eastus --sku-name B_Gen5_1 --server-name joi-dbserver --database-name joi-db --admin-user <admin-username> --admin-password <admin-password> --ssl-enforcement Enabled
+4. az webapp up --resource-group joi --location eastus --plan joi-plan --sku P1V2 --name joi-site
+5. az webapp config appsettings set --settings DBHOST="joi-dbserver" DBUSER="<admin-username>" DBPASS="<admin-password>" DBNAME="joi-db"
 
 Here is a line by line description:
 
