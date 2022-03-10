@@ -50,7 +50,7 @@ class Device(models.Model):
     """
     device_id = models.UUIDField(primary_key=True)  # Joi (Raspberry Pi) should store this in /etc/environment
     name = models.CharField(max_length=50, null=False) 
-    description = models.CharField(max_length=255, null=True) 
+    description = models.CharField(max_length=255, null=True, blank=True) 
     resident = models.ForeignKey(Resident, on_delete=models.DO_NOTHING, null=False) # the resident currently associated with this device
     is_active = models.BooleanField(null=False) # gives admin ability to disable  (not currently using this)
 
@@ -81,9 +81,9 @@ class MemoryBox(models.Model):
     memorybox_type = models.ForeignKey(MemoryBoxType, on_delete=models.DO_NOTHING, null=False)
     resident = models.ForeignKey(Resident, on_delete=models.DO_NOTHING, null=False)
     name = models.CharField(max_length=50, null=False) 
-    description = models.CharField(max_length=255, null=True) 
+    description = models.CharField(max_length=255, null=True, blank=True) 
     url = models.CharField(max_length=2048, null=False)  # reference to spotify playlist or google photos library/album
-    tags = models.CharField(max_length=255, null=True) # comma delimited list?
+    tags = models.CharField(max_length=255, null=True, blank=True) # comma delimited list?
     is_active = models.BooleanField(null=False) # gives admin, researcher, or care partner ability to disable  (not currently using this)
 
 class MemoryBoxSession(models.Model):

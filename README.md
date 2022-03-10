@@ -99,7 +99,7 @@ Apply outstanding migrations to the database
     python manage.py initialize_data      
 
 ### Redeploy code to Azure
-    az webapp up
+    az webapp up --runtime "PYTHON:3.9"
 
 ### Run Management Commands on Azure    
 1. Open Azure Shell
